@@ -181,15 +181,15 @@
                                     <td><span><?php echo $no++ ?></span></td>
                                     <td>
                                         <span class="caption" name="no_pemesanan" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['no_pemesanan']; ?></span>
-                                        <input type="text" name="no_pemesanan" class="editor" value="<?php echo $dt['no_pemesanan']; ?>" data-id=<?php echo $dt['no_pemesanan'] ?>>
+                                        <input type="text" name="no_pemesanan" class="editor" value="<?php echo $dt['no_pemesanan']; ?>" data-id="<?php echo $dt['no_pemesanan'] ?>" disabled>
                                     </td>
                                     <td>
                                         <span class="caption" name="nama_customer" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['nama_customer']; ?></span>
-                                        <input type="text" name="nama_customer" value="<?php echo $dt['nama_customer']; ?>" class="editor" data-id='<?php echo $dt['id_pemesanan'] ?>'>
+                                        <input type="text" name="nama_customer" value="<?php echo $dt['nama_customer']; ?>" class="editor" data-id='<?php echo $dt['id_pemesanan'] ?>' disabled>
                                     </td>
                                     <td>
                                         <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>' name="nama_kasir"><?php echo $dt['nama_kasir']; ?></span>
-                                        <input type="text" name="nama_kasir" value="<?php echo $dt['nama_kasir']; ?>" class="editor" data-id='<?php echo $dt['id_pemesanan'] ?>'>
+                                        <input type="text" name="nama_kasir" value="<?php echo $dt['nama_kasir']; ?>" class="editor" data-id='<?php echo $dt['id_pemesanan'] ?>' disabled>
                                     </td>
                                     <td>
                                         <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>' name="jenis_cucian"><?php echo $dt['jenis_cucian']; ?></span>

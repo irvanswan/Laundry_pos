@@ -131,20 +131,18 @@
         data.parfum_cucian = tr.find("input[name=parfum_cucian]").val();
         data.total_pemesanan = tr.find("input[name=total_pemesanan]").val();
         data.no_telp_customer = tr.find("input[name=no_telp_customer]").val();
-
         $.ajax({
             type : "post",
             cache : "false",
-            dataType : "json",
             data : data,
             url:"<?php echo base_url('admin/editpemesanan'); ?>",
             success : function(){
                 $(".editor").hide();
                 tr.find("button[class~=btn_confirms]").hide();
                 tr.find("button[class~=btn_edit]").fadeIn();
-                tr.find("span[name = no_pemesanan]").fadeIn().text(data.no_pemesanan);
-                tr.find("span[name = nama_customer]").fadeIn().text(data.nama_customer);
-                tr.find("span[name = nama_kasir]").fadeIn().text(data.nama_kasir);
+                tr.find("span[name=no_pemesanan]").fadeIn().text(data.no_pemesanan);
+                tr.find("span[name=nama_customer]").fadeIn().text(data.nama_customer);
+                tr.find("span[name=nama_kasir]").fadeIn().text(data.nama_kasir);
                 tr.find("span[name = jenis_cucian]").fadeIn().text(data.jenis_cucian);
                 tr.find("span[name = paket_cucian]").fadeIn().text(data.paket_cucian);
                 tr.find("span[name = berat_cucian]").fadeIn().text(data.berat_cucian);

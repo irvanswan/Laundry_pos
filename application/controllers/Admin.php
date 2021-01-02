@@ -111,10 +111,15 @@ class Admin extends CI_Controller
         );
 
         $data = array(
-            'no_pemesanan' => $this->input->post("no_pemesanan")
+            'jenis_cucian' => $this->input->post('jenis_cucian'),
+            'paket_cucian' => $this->input->post('paket_cucian'),
+            'berat_cucian' => $this->input->post('berat_cucian'),
+            'parfum_cucian' => $this->input->post('parfum_cucian'),
+            'total_pemesanan' => $this->input->post('total_pemesanan'),
+            'no_telp_customer' => $this->input->post('no_telp_customer')
         );
         $this->db->where($where);
-        echo json_encode($data);
+        $this->db->update('data_pemesanan',$data);
         //$this->crud_model->update($id,$value,$modul);
     }
     public function printpemesanan()
