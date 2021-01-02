@@ -1,0 +1,53 @@
+.background-full{
+    display: table;
+    width: 100%;
+    background: linear-gradient(rgba(0, 0, 35, 0.5), rgba(0, 0, 35, 0.5)), url('../img/headers.jpg');
+    background-position: center top;
+    height: 350px;
+    color: white;
+}
+.text, .text:hover{
+    color: black;
+    font-size: 12px;
+}
+.lab .labelku{
+    font-size: 100%;
+    color: black;
+}
+.lab .labelku-lab{
+    font-size: 150%;
+    color: black;
+}
+
+/* card */
+.card-us{
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 16px !important;
+    color: black !important;
+}
+.card-bodreg{
+    padding: 25px 25px 0 25px !important;
+}
+.card-category{
+    color: black !important;
+}
+.invisible{
+    position: relative !important;
+    display: none;
+}
+@media (max-width: 992px){
+    .card-head{
+        margin: 0 50px !important;
+    }
+    .sub-forgot{
+        padding-top: 20px;
+        margin-bottom: -20px;
+    }
+}
+@media (max-width: 1200px){
+    .gbr .gbr-gbr{
+       width: 40%;
+    }
+}
+/* card */
