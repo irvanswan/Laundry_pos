@@ -115,6 +115,8 @@
         tr.find("span[class~='caption']").hide();
         tr.find("button[class~='btn_edit']").hide();
         tr.find("input[class~='editor']").fadeIn().focus();
+        tr.find("select[class~='editor']").fadeIn();
+
     });
 
     $(document).on("click",".btn_confirms",function(){
@@ -130,6 +132,7 @@
         data.parfum_cucian = tr.find("input[name=parfum_cucian]").val();
         data.total_pemesanan = tr.find("input[name=total_pemesanan]").val();
         data.no_telp_customer = tr.find("input[name=no_telp_customer]").val();
+        data.status = tr.find("select[name=status]").val();
         $.ajax({
             type : "post",
             cache : "false",
@@ -148,6 +151,7 @@
                 tr.find("span[name = parfum_cucian]").fadeIn().text(data.parfum_cucian);
                 tr.find("span[name = total_pemesanan]").fadeIn().text(data.total_pemesanan);
                 tr.find("span[name = no_telp_customer]").fadeIn().text(data.no_telp_customer);
+                  tr.find("span[name = status]").fadeIn().text(data.status);
             }
         })
     });

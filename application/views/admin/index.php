@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="<?= base_url('admin/coba'); ?>" name="cart" method="POST" target="_blank">
+                    <form action="<?= base_url('admin/coba'); ?>" name="cart" method="POST">
                         <div class="control-group">
                             <div class="form-row">
                                 <div class="form-group col-md-4">
@@ -167,6 +167,7 @@
                                     <th>Parfum Cucian</th>
                                     <th>Sub Total</th>
                                     <th>No. Telp</th>
+                                    <th>Status</th>
                                     <th class="text-center">Tindakan</th>
                                     <th>Struk</th>
                                     <th>Pesan WA</th>
@@ -214,6 +215,17 @@
                                     <td>
                                         <span class="caption" name="no_telp_customer" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['no_telp_customer']; ?></span>
                                         <input type="text" name="no_telp_customer" class="editor" data-id="<?php echo $dt['id_pemesanan'] ?>" value="<?php echo $dt['no_telp_customer'] ?>">
+                                    </td>
+                                    <td>
+                                        <span class="caption" name="status" data-id='<?php echo $dt['status'] ?>'><?php echo $dt['status']; ?></span>
+                                        <select name="status" class="editor">
+                                            <option value="<?php echo $dt['status'] ?>"><?php echo $dt['status']?></option>
+                                            <option value="tunggu">Tunggu</option>
+                                            <option value="cuci">Cuci - Siap Ambil</option>
+                                            <option value="dryer">Dryer - Siap Ambil</option>
+                                            <option value="setrika">Setrika - Siap Ambil</option>
+                                            <option value="selesai">Selesai</option>
+                                        </select>
                                     </td>
                                     <td>
                                         <div class="row">

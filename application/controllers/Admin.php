@@ -111,9 +111,12 @@ class Admin extends CI_Controller
                 'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $subttl),
                 'id_user'           => $this->session->userdata('id_entitas')
             );
-            $this->db->insert('data_pemesanan', $data);
+            $query = $this->db->insert('data_pemesanan', $data);
         }
-        $this->cetakpemesanan($no_pemesanan);
+        if($query){
+                $this->cetakpemesanan($no_pemesanan);
+            }
+        
         }
     }
 
@@ -139,7 +142,8 @@ class Admin extends CI_Controller
             'berat_cucian' => $this->input->post('berat_cucian'),
             'parfum_cucian' => $this->input->post('parfum_cucian'),
             'total_pemesanan' => $this->input->post('total_pemesanan'),
-            'no_telp_customer' => $this->input->post('no_telp_customer')
+            'no_telp_customer' => $this->input->post('no_telp_customer'),
+            'status' => $this->input->post('status')
         );
         $this->db->where($where);
         $this->db->update('data_pemesanan',$data);
@@ -174,6 +178,7 @@ class Admin extends CI_Controller
         $no = 1;
         $grandttl=0;
         foreach ($mahasiswa as $row) {
+            $tanggal_pemesanan = date('d/m/yy',strtotime($row->tanggal_pemesanan));
             $pdf->SetMargins(10, 3, 4);
             $pdf->Cell(15, 6, "Nama", 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
@@ -189,15 +194,21 @@ class Admin extends CI_Controller
             $pdf->Cell(30, 6, "Paket Cucian", 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
             $pdf->Cell(30, 6, $row->paket_cucian, 0, 1);
+             $pdf->Cell(30, 6, "Jenis Cucian", 0, 0);
+            $pdf->Cell(6, 6, " : ", 0, 0);
+            $pdf->Cell(30, 6, $row->jenis_cucian, 0, 1);
             $pdf->Cell(30, 6, "Jam Pesan", 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
             $pdf->Cell(30, 6, $row->waktu_pemesanan, 0, 1);
             $pdf->Cell(30, 6, "Tanggal Pesan", 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
-            $pdf->Cell(30, 6, $row->tanggal_pemesanan, 0, 1);
+            $pdf->Cell(30, 6, $tanggal_pemesanan, 0, 1);
             $pdf->Cell(30, 6, "Total Pemesanan", 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
             $pdf->Cell(30, 6, $row->total_pemesanan, 0, 1);
+            $pdf->Cell(30, 6, "status", 0, 0);
+            $pdf->Cell(6, 6, " : ", 0, 0);
+            $pdf->Cell(30, 6, $row->status, 0, 1);
             $pdf->Cell(25, 6, " ", 0, 1);
             $grandttl += $row->total_pemesanan;
         }
