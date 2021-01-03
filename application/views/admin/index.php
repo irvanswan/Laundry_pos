@@ -27,11 +27,11 @@
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="no_pemesanan">No Pemesanan</label>
-                                    <input type="text" class="form-control" name="no_pemesanan" id="no_pemesanan" placeholder="cth : 20/12/00001">
+                                    <input type="text" class="form-control" name="no_pemesanan" id="no_pemesanan" placeholder="cth : 20/12/00001" value="<?php echo $kode ?>" readonly>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="nama_customer">Nama Customer</label>
-                                    <input type="text" class="form-control autofill" name="nama_customer" id="nama_customer">
+                                    <input type="text" class="form-control autofill" name="nama_customer" id="nama_customer" <?php echo form_error('nama_customer', '<small class="text-danger">', '</small>'); ?>>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="nama_kasir">Nama Kasir</label>
@@ -45,18 +45,18 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">+62</div>
                                         </div>
-                                        <input type="number" class="form-control" name="no_telp_customer" id="no_telp_customer" placeholder="85...">
+                                        <input type="number" class="form-control" name="no_telp_customer" id="no_telp_customer" placeholder="85..." <?php echo form_error('no_telp_customer', '<small class="text-danger">', '</small>'); ?>>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="status">Status</label>
                                     <select id="status" class="form-control" name="status">
                                         <option selected>Pilih...</option>
-                                        <option value="1">Tunggu</option>
-                                        <option value="2">Cuci - Siap Ambil</option>
-                                        <option value="3">Dryer - Siap Ambil</option>
-                                        <option value="4">Setrika - Siap Ambil</option>
-                                        <option value="5">Selesai</option>
+                                        <option value="tunggu">Tunggu</option>
+                                        <option value="cuci">Cuci - Siap Ambil</option>
+                                        <option value="dryer">Dryer - Siap Ambil</option>
+                                        <option value="setrika">Setrika - Siap Ambil</option>
+                                        <option value="selesai">Selesai</option>
                                     </select>
                                 </div>
                             </div>
@@ -83,7 +83,7 @@
                                                             </button>
                                                         </td>
 
-                                                        <td><input class="form-control" type="number" name="berat[]" id="berat"></td>
+                                                        <td><input class="form-control" type="number" name="berat[]" id="berat"> </td>
                                                         <td>
                                                             <select class="form-control" name="paket[]" id="paket">
                                                                 <option value="1000">Paket A</option>
@@ -165,7 +165,7 @@
                                     <th>Paket Cucian</th>
                                     <th>Berat Cucian</th>
                                     <th>Parfum Cucian</th>
-                                    <th>Total Pemesanan</th>
+                                    <th>Sub Total</th>
                                     <th>No. Telp</th>
                                     <th class="text-center">Tindakan</th>
                                     <th>Struk</th>
@@ -193,19 +193,19 @@
                                     </td>
                                     <td>
                                         <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>' name="jenis_cucian"><?php echo $dt['jenis_cucian']; ?></span>
-                                        <input type="text" name="jenis_cucian" value="<?php echo $dt['jenis_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>' class = "editor">
+                                        <input type="text" name="jenis_cucian" value="<?php echo $dt['jenis_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>' class = "editor" id="jenis_cucian">
                                     </td>
                                     <td>
                                         <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>'  name="paket_cucian"><?php echo $dt['paket_cucian']; ?></span>
-                                        <input type="text" name="paket_cucian" class="editor" value="<?php echo $dt['paket_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>'>
+                                        <input type="text" name="paket_cucian" class="editor" value="<?php echo $dt['paket_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>' id="paket_cucian">
                                     </td>
                                     <td>
                                         <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>' name="berat_cucian"><?php echo $dt['berat_cucian']; ?></span>
-                                        <input type="text" name="berat_cucian" class="editor" value="<?php echo $dt['berat_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>'>
+                                        <input type="text" name="berat_cucian" class="editor" value="<?php echo $dt['berat_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>' id="berat_cucian">
                                     </td>
                                     <td>
                                         <span class="caption" name="parfum_cucian" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['parfum_cucian']; ?></span>
-                                        <input type="text" name="parfum_cucian" class="editor" value="<?php echo $dt['parfum_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>'>
+                                        <input type="text" name="parfum_cucian" class="editor" value="<?php echo $dt['parfum_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>' id="parfum_cucian">
                                     </td>
                                     <td>
                                         <span class="caption" name="total_pemesanan" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['total_pemesanan'] ?></span>

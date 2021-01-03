@@ -103,7 +103,6 @@
             success: function(data) {
                 var json = data,
                     obj = JSON.parse(json);
-                $("#no_pemesanan").val(obj.no_pemesanan);
                 $("#no_telp_customer").val(obj.no_telp_customer);
                 $("#status").val(obj.status);
             },

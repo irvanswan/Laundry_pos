@@ -30,13 +30,14 @@ class Admin extends CI_Controller
     //==================================== Area untuk dashboard/index admin ====================================
     public function index()
     {
+
         $data['title'] = "Dashboard Admin";
         $data['title_nav'] = "Dashboard Admin";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
         $this->db->order_by('nama_customer', 'ASC');
         $data['data_pemesanan'] = $this->db->get_where('data_pemesanan', ['id_user' => $this->session->userdata('id_entitas')])->result_array();
-
+        $data['kode'] = $this->kode();
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/navbar', $data);
@@ -52,7 +53,6 @@ class Admin extends CI_Controller
         $bio = $this->data_pemesanan->getDataPemesanan($id_entitas, $nama_customer);
 
         $data = array(
-            'no_pemesanan' => $bio['no_pemesanan'],
             'no_telp_customer' => $bio['no_telp_customer'],
             'status' => $bio['status'],
         );
@@ -62,17 +62,39 @@ class Admin extends CI_Controller
 
     public function coba()
     {
-        $no_pemesanan = $this->input->post('no_pemesanan');
-        $nm_customer = $this->input->post('nama_customer');
-        $nm_kasir = $this->input->post('nama_kasir');
-        $no_telp_customer = $this->input->post('no_telp_customer');
-        $status = $this->input->post('status');
-        $berat  = $this->input->post('berat');
-        $paket  = $this->input->post('paket');
-        $jenis  = $this->input->post('jenis');
-        $parfum = $this->input->post('parfum');
-        $grandttl = $this->input->post('harga_total');
-        $id_pemesanan;
+        $this->form_validation->set_rules('nama_customer', 'Nama_customer', 'required|trim|xss_clean', [
+            'required' => 'Nama Customer tidak boleh kosong !'
+        ]);
+        $this->form_validation->set_rules('no_telp_customer','No_telp_Customer','required|trim|xss_clean',[
+            'required' => 'No Telp tidak boleh kosong !'
+        ]);
+
+        if($this->form_validation->run()==false){
+            $data['kode'] = $this->kode();
+            $data['title'] = "Dashboard Admin";
+            $data['title_nav'] = "Dashboard Admin";
+            $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+            $this->db->order_by('nama_customer', 'ASC');
+            $data['data_pemesanan'] = $this->db->get_where('data_pemesanan', ['id_user' => $this->session->userdata('id_entitas')])->result_array();
+
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/navbar', $data);
+            $this->load->view('admin/index', $data);
+            $this->load->view('templates/footer');
+        }else{
+            $no_pemesanan = $this->input->post('no_pemesanan');
+            $nm_customer = $this->input->post('nama_customer');
+            $nm_kasir = $this->input->post('nama_kasir');
+            $no_telp_customer = $this->input->post('no_telp_customer');
+            $status = $this->input->post('status');
+            $berat  = $this->input->post('berat');
+            $paket  = $this->input->post('paket');
+            $jenis  = $this->input->post('jenis');
+            $parfum = $this->input->post('parfum');
+            $subttl = $this->input->post('item_total');
+            $id_pemesanan;
 
         for ($i = 0; $i < count($berat); $i++) {
 
@@ -86,12 +108,13 @@ class Admin extends CI_Controller
                 'parfum_cucian'     => $parfum[$i],
                 'no_telp_customer'  => $no_telp_customer,
                 'status'            => $status,
-                'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $grandttl),
+                'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $subttl),
                 'id_user'           => $this->session->userdata('id_entitas')
             );
             $this->db->insert('data_pemesanan', $data);
         }
         $this->cetakpemesanan($no_pemesanan);
+        }
     }
 
     public function hapuspemesanan()
@@ -149,6 +172,7 @@ class Admin extends CI_Controller
         $this->db->where($where);
         $mahasiswa = $this->db->get('data_pemesanan')->result();
         $no = 1;
+        $grandttl=0;
         foreach ($mahasiswa as $row) {
             $pdf->SetMargins(10, 3, 4);
             $pdf->Cell(15, 6, "Nama", 0, 0);
@@ -175,16 +199,34 @@ class Admin extends CI_Controller
             $pdf->Cell(6, 6, " : ", 0, 0);
             $pdf->Cell(30, 6, $row->total_pemesanan, 0, 1);
             $pdf->Cell(25, 6, " ", 0, 1);
+            $grandttl += $row->total_pemesanan;
         }
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(30, 6, "Harga Total", 0, 0);
+        $pdf->Cell(6, 6, " : ", 0, 0);
+        $pdf->Cell(30, 6, $grandttl, 0, 1);
         $pdf->Output();
     }
     //==================================== Area untuk dashboard/index admin ====================================
 
-
-
-
-
-
+    public function kode(){
+          $this->db->select('RIGHT(data_pemesanan.no_pemesanan,2) as no_pemesanan', FALSE);
+          $this->db->order_by('no_pemesanan','DESC');    
+          $this->db->limit(1);    
+          $query = $this->db->get('data_pemesanan');  //cek dulu apakah ada sudah ada kode di tabel.    
+          if($query->num_rows() <> 0){      
+               //cek kode jika telah tersedia    
+               $data = $query->row();      
+               $kode = intval($data->no_pemesanan) + 1; 
+          }
+          else{      
+               $kode = 1;  //cek jika kode belum terdapat pada table
+          }
+              $tgl=date('dmY'); 
+              $batas = str_pad($kode, 3, "0", STR_PAD_LEFT);    
+              $kodetampil = $tgl.$batas;  //format kode
+              return $kodetampil;  
+         }
 
     public function my_profile()
     {
