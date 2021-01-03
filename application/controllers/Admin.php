@@ -30,7 +30,7 @@ class Admin extends CI_Controller
         $data['title_nav'] = "Dashboard Admin";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-        $this->db->order_by('nama_customer','DESC');
+        $this->db->order_by('nama_customer', 'DESC');
         $data['data_pemesanan'] = $this->db->get('data_pemesanan')->result_array();
 
         $this->load->view('templates/header', $data);
@@ -39,7 +39,7 @@ class Admin extends CI_Controller
         $this->load->view('admin/index', $data);
         $this->load->view('templates/footer');
     }
-    // data pemesanan
+    // autofil data pemesanan
     public function data_pemesanan()
     {
         $id_entitas = $this->session->userdata('id_entitas');
@@ -214,7 +214,8 @@ class Admin extends CI_Controller
         }
     }
 
-    public function coba(){
+    public function coba()
+    {
         $no_pemesanan = $this->input->post('no_pemesanan');
         $nm_customer = $this->input->post('nama_customer');
         $nm_kasir = $this->input->post('nama_kasir');
@@ -226,28 +227,29 @@ class Admin extends CI_Controller
         $parfum = $this->input->post('parfum');
         $grandttl = $this->input->post('harga_total');
         $id_pemesanan;
-        
-        for($i=0; $i<count($berat);$i++){
+
+        for ($i = 0; $i < count($berat); $i++) {
 
             $data = array(
-            'no_pemesanan'      => $no_pemesanan,
-            'nama_customer'     => $nm_customer,
-            'nama_kasir'        => $nm_kasir,
-            'jenis_cucian'      => $jenis[$i],
-            'paket_cucian'      => $paket[$i],
-            'berat_cucian'      => $berat[$i],
-            'parfum_cucian'     => $parfum[$i],
-            'no_telp_customer'  => $no_telp_customer,
-            'status'            => $status,
-            'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $grandttl),
-            'id_user'           => $this->session->userdata('id_entitas')
+                'no_pemesanan'      => $no_pemesanan,
+                'nama_customer'     => $nm_customer,
+                'nama_kasir'        => $nm_kasir,
+                'jenis_cucian'      => $jenis[$i],
+                'paket_cucian'      => $paket[$i],
+                'berat_cucian'      => $berat[$i],
+                'parfum_cucian'     => $parfum[$i],
+                'no_telp_customer'  => $no_telp_customer,
+                'status'            => $status,
+                'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $grandttl),
+                'id_user'           => $this->session->userdata('id_entitas')
             );
             $this->db->insert('data_pemesanan', $data);
         }
         $this->cetakpemesanan($no_pemesanan);
     }
 
-    public function hapuspemesanan(){
+    public function hapuspemesanan()
+    {
         $data = array(
             'id_pemesanan' => $this->input->post('id_pemesanan')
         );
@@ -256,11 +258,12 @@ class Admin extends CI_Controller
         redirect('admin');
     }
 
-    public function editpemesanan(){
+    public function editpemesanan()
+    {
         $where = array(
             'id_pemesanan' => $this->input->post("id")
         );
-        
+
         $data = array(
             'no_pemesanan' => $this->input->post("no_pemesanan")
         );
@@ -268,60 +271,60 @@ class Admin extends CI_Controller
         echo json_encode($data);
         //$this->crud_model->update($id,$value,$modul);
     }
-    public function printpemesanan(){
+    public function printpemesanan()
+    {
         $no_pemesanan = $this->input->post('no_pemesanan');
         $this->cetakpemesanan($no_pemesanan);
     }
 
-    function cetakpemesanan($id_pemesanan){
+    function cetakpemesanan($id_pemesanan)
+    {
 
         $where = array(
-            'no_pemesanan'=>$id_pemesanan
+            'no_pemesanan' => $id_pemesanan
         );
-        $pdf = new FPDF('p','mm','A5');
+        $pdf = new FPDF('p', 'mm', 'A5');
         // membuat halaman baru
         $pdf->AddPage();
         // setting jenis font yang akan digunakan
-        $pdf->SetFont('Arial','B',16);
+        $pdf->SetFont('Arial', 'B', 16);
         // mencetak string 
-        $pdf->Cell(190,7,'LAUNDRY-KUY',0,1,'C');
-        $pdf->SetFont('Arial','B',12);
-        $pdf->Cell(190,7,'Semoga harimu menyenangkan :) ',0,1,'C');
+        $pdf->Cell(190, 7, 'LAUNDRY-KUY', 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(190, 7, 'Semoga harimu menyenangkan :) ', 0, 1, 'C');
         // Memberikan space kebawah agar tidak terlalu rapat
-        $pdf->Cell(10,7,'',0,1);
-        $pdf->SetFont('Arial','',10);
+        $pdf->Cell(10, 7, '', 0, 1);
+        $pdf->SetFont('Arial', '', 10);
         $this->db->where($where);
         $mahasiswa = $this->db->get('data_pemesanan')->result();
         $no = 1;
-        foreach ($mahasiswa as $row){
-            $pdf->SetMargins(10, 3 , 4); 
-            $pdf->Cell(15,6,"Nama",0,0);
-            $pdf->Cell(6,6," : ",0,0);
-            $pdf->Cell(25,6,$row->nama_customer,0,1);
-            $pdf->Cell(25,6," ",0,1);
-            $pdf->Cell(30,6,"Pemesanan ".$no++,0,1);
-            $pdf->Cell(30,6,"Berat",0,0);
-            $pdf->Cell(6,6," : ",0,0);
-            $pdf->Cell(30,6,$row->berat_cucian." Kg",0,1);
-            $pdf->Cell(30,6,"Parfum",0,0);
-            $pdf->Cell(6,6," : ",0,0);
-            $pdf->Cell(30,6,$row->parfum_cucian,0,1); 
-            $pdf->Cell(30,6,"Paket Cucian",0,0);
-            $pdf->Cell(6,6," : ",0,0);
-            $pdf->Cell(30,6,$row->paket_cucian,0,1);
-            $pdf->Cell(30,6,"Jam Pesan",0,0);
-            $pdf->Cell(6,6," : ",0,0);
-            $pdf->Cell(30,6,$row->waktu_pemesanan,0,1);
-            $pdf->Cell(30,6,"Tanggal Pesan",0,0);
-            $pdf->Cell(6,6," : ",0,0);
-            $pdf->Cell(30,6,$row->tanggal_pemesanan,0,1);
-            $pdf->Cell(30,6,"Total Pemesanan",0,0);
-            $pdf->Cell(6,6," : ",0,0);
-            $pdf->Cell(30,6,$row->total_pemesanan,0,1);
-            $pdf->Cell(25,6," ",0,1);
+        foreach ($mahasiswa as $row) {
+            $pdf->SetMargins(10, 3, 4);
+            $pdf->Cell(15, 6, "Nama", 0, 0);
+            $pdf->Cell(6, 6, " : ", 0, 0);
+            $pdf->Cell(25, 6, $row->nama_customer, 0, 1);
+            $pdf->Cell(25, 6, " ", 0, 1);
+            $pdf->Cell(30, 6, "Pemesanan " . $no++, 0, 1);
+            $pdf->Cell(30, 6, "Berat", 0, 0);
+            $pdf->Cell(6, 6, " : ", 0, 0);
+            $pdf->Cell(30, 6, $row->berat_cucian . " Kg", 0, 1);
+            $pdf->Cell(30, 6, "Parfum", 0, 0);
+            $pdf->Cell(6, 6, " : ", 0, 0);
+            $pdf->Cell(30, 6, $row->parfum_cucian, 0, 1);
+            $pdf->Cell(30, 6, "Paket Cucian", 0, 0);
+            $pdf->Cell(6, 6, " : ", 0, 0);
+            $pdf->Cell(30, 6, $row->paket_cucian, 0, 1);
+            $pdf->Cell(30, 6, "Jam Pesan", 0, 0);
+            $pdf->Cell(6, 6, " : ", 0, 0);
+            $pdf->Cell(30, 6, $row->waktu_pemesanan, 0, 1);
+            $pdf->Cell(30, 6, "Tanggal Pesan", 0, 0);
+            $pdf->Cell(6, 6, " : ", 0, 0);
+            $pdf->Cell(30, 6, $row->tanggal_pemesanan, 0, 1);
+            $pdf->Cell(30, 6, "Total Pemesanan", 0, 0);
+            $pdf->Cell(6, 6, " : ", 0, 0);
+            $pdf->Cell(30, 6, $row->total_pemesanan, 0, 1);
+            $pdf->Cell(25, 6, " ", 0, 1);
         }
         $pdf->Output();
     }
-
-
 }

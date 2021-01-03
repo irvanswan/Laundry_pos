@@ -83,45 +83,45 @@
                                                             </button>
                                                         </td>
 
-                                                        <td><input type="number" name="berat[]" id="berat"></td>
+                                                        <td><input class="form-control" type="number" name="berat[]" id="berat"></td>
                                                         <td>
-                                                            <select name="paket[]" id="paket">
+                                                            <select class="form-control" name="paket[]" id="paket">
                                                                 <option value="1000">Paket A</option>
                                                                 <option value="2000">Paket B</option>
                                                             </select>
                                                         </td>
                                                         <td>
-                                                            <select name="jenis[]" id="jenis">
+                                                            <select class="form-control" name="jenis[]" id="jenis">
                                                                 <option value="1000">Jenis A</option>
                                                                 <option value="2000">Jenis B</option>
                                                             </select>
                                                         </td>
                                                         <td>
-                                                            <select name="parfum[]" id="parfum">
+                                                            <select class="form-control" name="parfum[]" id="parfum">
                                                                 <option value="1000">Parfum A</option>
                                                                 <option value="2000">Parfum B</option>
                                                             </select>
                                                         </td>
                                                         <td>&nbsp;</td>
-                                                        <td><input type="text" name="item_total" id="item_total" value="" jAutoCalc="{#berat} * ({#paket} + {#jenis} + {#parfum})"></td>
+                                                        <td><input type="text" class="form-control" name="item_total" id="item_total" value="" jAutoCalc="{#berat} * ({#paket} + {#jenis} + {#parfum})"></td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4">&nbsp;</td>
                                                         <td>Harga Total</td>
                                                         <td>&nbsp;</td>
-                                                        <td><input type="text" name="harga_total" id="harga_total" value="" jAutoCalc="SUM({item_total})"></td>
+                                                        <td><input type="text" class="form-control" name="harga_total" id="harga_total" value="" jAutoCalc="SUM({item_total})"></td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4">&nbsp;</td>
                                                         <td>Bayar</td>
                                                         <td>&nbsp;</td>
-                                                        <td><input type="text" name="bayar" id="bayar" value="" id="bayar"></td>
+                                                        <td><input type="text" class="form-control" name="bayar" id="bayar" value="" id="bayar"></td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4">&nbsp;</td>
                                                         <td>Kembalian</td>
                                                         <td>&nbsp;</td>
-                                                        <td><input type="text" name="kembalian" value="" jAutoCalc="{#bayar} - {#harga_total}"></td>
+                                                        <td><input type="text" class="form-control" name="kembalian" value="" jAutoCalc="{#bayar} - {#harga_total}"></td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="99">
@@ -173,12 +173,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
-                                        $no = 1;
-                                        foreach ($data_pemesanan as $dt) {
-                                    ?>
+                                <?php
+                                $no = 1;
+                                foreach ($data_pemesanan as $dt) {
+                                ?>
                                 <tr class="data-row">
-                                    <td><span><?php echo $no++?></span></td>
+                                    <td><span><?php echo $no++ ?></span></td>
                                     <td>
                                         <span class="caption" name="no_pemesanan" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['no_pemesanan']; ?></span>
                                         <input type="text" name="no_pemesanan" class="editor" value="<?php echo $dt['no_pemesanan']; ?>" data-id=<?php echo $dt['no_pemesanan'] ?>>
@@ -209,7 +209,7 @@
                                     </td>
                                     <td>
                                         <span class="caption" name="total_pemesanan" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['total_pemesanan'] ?></span>
-                                        <input type="text" name="total_pemesanan" class="editor" value="<?php echo $dt['total_pemesanan']?>" data-id='<?php echo $dt['id_pemesanan'] ?>'>
+                                        <input type="text" name="total_pemesanan" class="editor" value="<?php echo $dt['total_pemesanan'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>'>
                                     </td>
                                     <td>
                                         <span class="caption" name="no_telp_customer" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['no_telp_customer']; ?></span>
