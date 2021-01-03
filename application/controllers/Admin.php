@@ -30,7 +30,7 @@ class Admin extends CI_Controller
         $data['title_nav'] = "Dashboard Admin";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-        $this->db->order_by('nama_customer', 'DESC');
+        $this->db->order_by('nama_customer', 'ASC');
         $data['data_pemesanan'] = $this->db->get('data_pemesanan')->result_array();
 
         $this->load->view('templates/header', $data);
