@@ -221,10 +221,12 @@ class Admin extends CI_Controller
     //==================================== Area untuk dashboard/index admin ====================================
 
     public function kode(){
+          $tgl=date('d/m/Y');
           $this->db->select('RIGHT(data_pemesanan.no_pemesanan,2) as no_pemesanan', FALSE);
           $this->db->order_by('no_pemesanan','DESC');    
           $this->db->limit(1);    
-          $query = $this->db->get('data_pemesanan');  //cek dulu apakah ada sudah ada kode di tabel.    
+          $query = $this->db->get('data_pemesanan');  //cek dulu apakah ada sudah ada kode di tabel. 
+            
           if($query->num_rows() <> 0){      
                //cek kode jika telah tersedia    
                $data = $query->row();      
@@ -233,8 +235,7 @@ class Admin extends CI_Controller
           else{      
                $kode = 1;  //cek jika kode belum terdapat pada table
           }
-              $tgl=date('dmY'); 
-              $batas = str_pad($kode, 3, "0", STR_PAD_LEFT);    
+              $batas = str_pad($kode, 2, "0", STR_PAD_LEFT);    
               $kodetampil = $tgl.$batas;  //format kode
               return $kodetampil;  
          }

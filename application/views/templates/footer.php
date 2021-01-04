@@ -94,6 +94,19 @@
 
     $(function(){
     $(".btn_confirms").hide();
+    $(document).on("keydown","#no_telp_customer",function(e){
+        let keycode = e.keyCode || e.which;
+        let teks = $(this).val();
+       if(teks.length < 1){
+            if(keycode == 48){
+                return false;
+            }else{
+                return true;
+            }
+       }else{
+            return true;
+       }
+    });
     $(document).on("keyup",".autofill",function(){
         let nama_customer = $(this).val();
         $.ajax({
