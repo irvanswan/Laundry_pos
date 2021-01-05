@@ -194,23 +194,35 @@
                                     </td>
                                     <td>
                                         <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>' name="jenis_cucian"><?php echo $dt['jenis_cucian']; ?></span>
-                                        <input type="text" name="jenis_cucian" value="<?php echo $dt['jenis_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>' class = "editor" id="jenis_cucian">
+                                        <select name="jenis_cucian" class="editor" id="jenis_cucian1">
+                                            <option value="<?php echo $dt['jenis_cucian'] ?>"><?php echo $dt['parfum_cucian']?></option>
+                                            <option value="1000">Jenis A (1000)</option>
+                                            <option value="2000">Jenis B (2000)</option>
+                                        </select>
                                     </td>
                                     <td>
                                         <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>'  name="paket_cucian"><?php echo $dt['paket_cucian']; ?></span>
-                                        <input type="text" name="paket_cucian" class="editor" value="<?php echo $dt['paket_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>' id="paket_cucian">
+                                       <select name="paket_cucian" class="editor" id="paket_cucian1">
+                                            <option value="<?php echo $dt['paket_cucian'] ?>"><?php echo $dt['parfum_cucian']?></option>
+                                            <option value="1000">Paket A (1000)</option>
+                                            <option value="2000">Paket B (2000)</option>
+                                        </select>
                                     </td>
                                     <td>
                                         <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>' name="berat_cucian"><?php echo $dt['berat_cucian']; ?></span>
-                                        <input type="text" name="berat_cucian" class="editor" value="<?php echo $dt['berat_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>' id="berat_cucian">
+                                        <input type="number" name="berat_cucian" class="editor" value="<?php echo $dt['berat_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>' id="berat_cucian1" min=0>
                                     </td>
                                     <td>
                                         <span class="caption" name="parfum_cucian" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['parfum_cucian']; ?></span>
-                                        <input type="text" name="parfum_cucian" class="editor" value="<?php echo $dt['parfum_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>' id="parfum_cucian">
+                                        <select name="parfum_cucian" class="editor" id="parfum_cucian1">
+                                            <option value="<?php echo $dt['parfum_cucian'] ?>"><?php echo $dt['parfum_cucian']?></option>
+                                            <option value="1000">Parfum A</option>
+                                            <option value="2000">Parfum B</option>
+                                        </select>
                                     </td>
                                     <td>
                                         <span class="caption" name="total_pemesanan" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['total_pemesanan'] ?></span>
-                                        <input type="text" name="total_pemesanan" class="editor" value="<?php echo $dt['total_pemesanan'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>'>
+                                        <input type="text" name="total_pemesanan" class="editor" value="<?php echo $dt['total_pemesanan'] ?>" data-id="<?php echo $dt['id_pemesanan'] ?>">
                                     </td>
                                     <td>
                                         <span class="caption" name="no_telp_customer" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['no_telp_customer']; ?></span>

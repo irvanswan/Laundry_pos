@@ -124,12 +124,14 @@
 
     $(document).on("click",".btn_edit",function(){
         const tr = $(this).parents('tr');
+        /*let paket_cucian = tr.find('span[name=paket_cucian]').html();
+        let jenis_cucian = tr.find('span[name=jenis_cucian]').html();
+        let parfum_cucian = tr.find('span[name=parfum_cucian]').html();*/ 
         tr.find("button[class~='btn_confirms']").show();
         tr.find("span[class~='caption']").hide();
         tr.find("button[class~='btn_edit']").hide();
         tr.find("input[class~='editor']").fadeIn().focus();
         tr.find("select[class~='editor']").fadeIn();
-
     });
 
     $(document).on("click",".btn_confirms",function(){
@@ -139,10 +141,10 @@
         data.no_pemesanan = tr.find("input[name=no_pemesanan]").val();
         data.nama_customer = tr.find("input[name=nama_customer]").val();
         data.nama_kasir = tr.find("input[name=nama_kasir]").val();
-        data.jenis_cucian = tr.find("input[name=jenis_cucian]").val();
-        data.paket_cucian = tr.find("input[name=paket_cucian]").val();
+        data.jenis_cucian = tr.find("select[name=jenis_cucian]").val();
+        data.paket_cucian = tr.find("select[name=paket_cucian]").val();
         data.berat_cucian = tr.find("input[name=berat_cucian]").val();
-        data.parfum_cucian = tr.find("input[name=parfum_cucian]").val();
+        data.parfum_cucian = tr.find("select[name=parfum_cucian]").val();
         data.total_pemesanan = tr.find("input[name=total_pemesanan]").val();
         data.no_telp_customer = tr.find("input[name=no_telp_customer]").val();
         data.status = tr.find("select[name=status]").val();
