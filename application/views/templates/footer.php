@@ -92,7 +92,7 @@
         digitGroupSeparator: '.'
     })
 
-    $(function(){
+$(function(){
     $(".btn_confirms").hide();
     $(document).on("keydown","#no_telp_customer",function(e){
         let keycode = e.keyCode || e.which;
@@ -120,6 +120,16 @@
                 $("#status").val(obj.status);
             },
         })
+    });
+    $(document).on("change","#from-date",function(){
+        const form = $(this).parents('form');
+        let to = form.find("input[id=to-date]").val();
+        filtering($(this).val(),to);
+    });
+    $(document).on("change","#to-date",function(){
+        const form = $(this).parents('form');
+        let from = form.find("input[id=from-date]").val();
+        filtering(from,$(this).val());
     });
 
     $(document).on("click",".btn_edit",function(){
@@ -171,6 +181,126 @@
         })
     });
 });
+
+let filtering = (from,to)=>{
+    $.ajax({
+        dataType : "json",
+        method : "POST",
+        cache : "false",
+        data : {from_date : from, to_date : to},
+        url : "<?php  echo base_url('admin/filtering'); ?>",
+        success : function(data){
+            let table = $("#list_pemesanan");
+            let no = 1;
+            let html = "";
+            for (let i=0; i<data.length;i++){
+                  html += "<tr class='data-row' id='data-row'>"
+                                    +"<td><span>"+no++ +"</span></td>"
+                                    +"<td>"
+                                        +"<span class='caption' name='no_pemesanan' data-id="+data[i].id_pemesanan+">"+data[i].no_pemesanan+"</span>"
+                                        +"<input type='text' name='no_pemesanan' class='editor' value="+data[i].no_pemesanan+" data-id="+data[i].id_pemesanan+" disabled>"
+                                    +"</td>"
+                                    +"<td>"
+                                        +"<span class='caption' name='nama_customer' data-id="+data[i].id_pemesanan+">"+data[i].nama_customer+"</span>"
+                                        +"<input type='text' name='nama_customer' value="+data[i].nama_customer+" class='editor' data-id="+data[i].id_pemesanan+" disabled>"
+                                    +"</td>"
+                                    +"<td>"
+                                        +"<span class='caption' data-id="+data[i].id_pemesanan+" name='nama_kasir'>"+data[i].nama_kasir+"</span>"
+                                        +"<input type='text' name='nama_kasir' value="+data[i].nama_kasir+" class='editor' data-id="+data[i].id_pemesanan+" disabled>"
+                                    +"</td>"
+                                    +"<td>"
+                                        +"<span class='caption' data-id="+data[i].id_pemesanan+" name='jenis_cucian'>"+data[i].jenis_cucian+"</span>"
+                                        +"<select name='jenis_cucian' class='editor' id='jenis_cucian1'>"
+                                            +"<option value="+data[i].jenis_cucian+">"+data[i].jenis_cucian+"</option>"
+                                            +"<option value='1000'>Jenis A (1000)</option>"
+                                            +"<option value='2000'>Jenis B (2000)</option>"
+                                        +"</select>"
+                                    +"</td>"
+                                    +"<td>"
+                                        +"<span class='caption' data-id="+data[i].id_pemesanan+"  name='paket_cucian'>"+data[i].paket_cucian+"</span>"
+                                       +"<select name='paket_cucian' class='editor' id='paket_cucian1'>"
+                                            +"<option value="+data[i].paket_cucian+">"+data[i].paket_cucian+"</option>"
+                                            +"<option value='1000'>Paket A (1000)</option>"
+                                            +"<option value='2000'>Paket B (2000)</option>"
+                                        +"</select>"
+                                    +"</td>"
+                                    +"<td>"
+                                        +"<span class='caption' data-id="+data[i].id_pemesanan+" name='berat_cucian'>"+data[i].berat_cucian+"</span>"
+                                        +"<input type='number' name='berat_cucian' class='editor' value="+data[i].berat_cucian+" data-id="+data[i].id_pemesanan+" id='berat_cucian1' min=0>"
+                                    +"</td>"
+                                    +"<td>"
+                                        +"<span class='caption' name='parfum_cucian' data-id="+data[i].id_pemesanan+">"+data[i].parfum_cucian+"</span>"
+                                        +"<select name='parfum_cucian' class='editor' id='parfum_cucian1'>"
+                                            +"<option value="+data[i].berat_cucian+">"+data[i].berat_cucian+"</option>"
+                                            +"<option value='1000'>Parfum A</option>"
+                                            +"<option value='2000'>Parfum B</option>"
+                                        +"</select>"
+                                    +"</td>"
+                                    +"<td>"
+                                        +"<span class='caption' name='total_pemesanan' data-id="+data[i].id_pemesanan+">"+data[i].total_pemesanan+"</span>"
+                                        +"<input type='text' name='total_pemesanan' class='editor' value="+data[i].total_pemesanan+" data-id="+data[i].id_pemesanan+">"
+                                    +"</td>"
+                                    +"<td>"
+                                        +"<span class='caption' name='no_telp_customer' data-id="+data[i].id_pemesanan+">"+data[i].no_telp_customer+"</span>"
+                                        +"<input type='text' name='no_telp_customer' class='editor' data-id="+data[i].id_pemesanan+" value="+data[i].no_telp_customer+">"
+                                    +"</td>"
+                                    +"<td>"
+                                        +"<span class='caption' name='status' data-id="+data[i].id_pemesanan+">"+data[i].status+"</span>"
+                                        +"<select name='status' class='editor'>"
+                                            +"<option value="+data[i].status+">"+data[i].status+"</option>"
+                                            +"<option value='tunggu'>Tunggu</option>"
+                                            +"<option value='cuci'>Cuci - Siap Ambil</option>"
+                                            +"<option value='dryer'>Dryer - Siap Ambil</option>"
+                                            +"<option value='setrika'>Setrika - Siap Ambil</option>"
+                                            +"<option value='selesai'>Selesai</option>"
+                                        +"</select>"
+                                    +"</td>"
+                                    +"<td>"
+                                        +"<div class='row'>"
+                                            +"<div class='col-sm-6 mb-1'>"
+                                                +"<form action='<?= base_url('admin/hapuspemesanan'); ?>' class='text-center' method='POST'>"
+                                                    +"<input type='hidden' name='id_pemesanan' value="+data[i].id_pemesanan+">"
+                                                    +"<button type='submit' class='btn btn-danger' data-toggle='tooltip' data-placement='top' title='Inactive' onclick='return confirm('Apakah anda yakin menghapus data ini ?');'>"
+                                                        +"<i class='now-ui-icons ui-1_simple-remove'></i>"
+                                                    +"</button>"
+                                                +"</form>"
+                                            +"</div>"
+                                            +"<div class='col-sm-6 mr-1'>"
+                                                +"<button type='submit' class='btn btn-warning btn_edit' title='Edit'>"
+                                                    +"<i class='now-ui-icons ui-2_settings-90'></i>"
+                                                +"</button>"
+                                                +"<button type='submit' data-id="+data[i].id_pemesanan+" class='btn btn-primary btn_confirms' id='btn_confirm' title='Edit'>"
+                                                    +"<i class='now-ui-icons ui-1_check'></i>"
+                                                +"</button>"
+                                            +"</div>"
+                                        +"</div>"
+                                    +"</td>"
+                                    +"<td>"
+                                        +"<form action='<?= base_url('admin/printpemesanan'); ?>' class='text-center' method='POST'>"
+                                            +"<input type='hidden' name='id_pemesanan' value="+data[i].id_pemesanan+">"
+                                            +"<input type='hidden' name='no_pemesanan' value="+data[i].no_pemesanan+">"
+                                            +"<button type='submit' class='btn btn-success' data-toggle='tooltip' data-placement='top' title='Cetak Struk'>"
+                                                +"<i class='now-ui-icons files_paper'></i>"
+                                            +"</button>"
+                                        +"</form>"
+                                    +"</td>"
+                                    +"<td>"
+                                        +"<form action='' class='text-center'>"
+                                            +"<input type='hidden' name='' id=''>"
+                                            +"<button type='submit' class='btn btn-info' data-toggle='tooltip' data-placement='top' title='Cetak Struk'>"
+                                                +"<i class='now-ui-icons ui-1_send'></i>"
+                                            +"</button>"
+                                        +"</form>"
+                                    +"</td>"
+                                +"</tr>";
+              }
+              newtr = table.find("tbody[class=table-body]");
+              newtr.html(html);
+              newtr.find($(".editor")).hide();
+              newtr.find($(".btn_confirms")).hide();   
+        },
+    });
+}
 </script>
 </body>
 

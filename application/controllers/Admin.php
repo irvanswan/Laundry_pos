@@ -220,6 +220,16 @@ class Admin extends CI_Controller
     }
     //==================================== Area untuk dashboard/index admin ====================================
 
+    public function filtering(){
+        $data1 = $this->input->post('from_date');
+        $data2 = $this->input->post('to_date');
+        $from = date('Y-m-d',strtotime($data1));
+        $to = date('Y-m-d',strtotime($data2));
+        $this->db->where('tanggal_pemesanan >=',$from);
+        $this->db->where('tanggal_pemesanan <=',$to);
+        $data = $this->db->get('data_pemesanan')->result();
+        echo json_encode($data);
+    }
     public function kode(){
           date_default_timezone_set('Asia/Jakarta');
           $tgl=date('d/m/');
@@ -237,7 +247,7 @@ class Admin extends CI_Controller
           else{      
                $kode = 1;  //cek jika kode belum terdapat pada table
           }
-              $batas = str_pad($kode, 2, "0", STR_PAD_LEFT);    
+              $batas = str_pad($kode, 3, "0", STR_PAD_LEFT);    
               $kodetampil = $tgl.'V'.$tahun.$batas;  //format kode
               return $kodetampil;  
          }
