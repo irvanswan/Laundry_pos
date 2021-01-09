@@ -152,7 +152,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-info ">Simpan</button>
+                            <button type="submit" class="btn btn-info btn_simpan">Simpan</button>
                         </div>
                     </form>
                 </div>
@@ -266,107 +266,6 @@
                                                     <i class="now-ui-icons ui-1_zoom-bold"></i>
                                                 </button>
                                             </form>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-
-                                <?php
-                                $no = 1;
-                                foreach ($data_pemesanan as $dt) : ?>
-                                    <tr class="data-row" id="data-rowfilter" style="display: none;">
-                                        <td><span><?php echo $no++ ?></span></td>
-                                        <td>
-                                            <span class="caption" name="no_pemesanan"></span>
-                                            <input type="text" name="no_pemesanan" class="editor" value="<?php echo $dt['no_pemesanan']; ?>" data-id="<?php echo $dt['no_pemesanan'] ?>" disabled>
-                                        </td>
-                                        <td>
-                                            <span class="caption" name="nama_customer"></span>
-                                            <input type="text" name="nama_customer" value="<?php echo $dt['nama_customer']; ?>" class="editor" data-id='<?php echo $dt['id_pemesanan'] ?>' disabled>
-                                        </td>
-                                        <td>
-                                            <span class="caption" name="nama_kasir"></span>
-                                            <input type="text" name="nama_kasir" value="<?php echo $dt['nama_kasir']; ?>" class="editor" data-id='<?php echo $dt['id_pemesanan'] ?>' disabled>
-                                        </td>
-                                        <td>
-                                            <span class="caption" name="jenis_cucian"></span>
-                                            <select name="jenis_cucian" class="editor" id="jenis_cucian1">
-                                                <option value="<?php echo $dt['jenis_cucian'] ?>"></option>
-                                                <option value="1000">Jenis A (1000)</option>
-                                                <option value="2000">Jenis B (2000)</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <span class="caption" name="paket_cucian"></span>
-                                        <select name="paket_cucian" class="editor" id="paket_cucian1">
-                                                <option value="<?php echo $dt['paket_cucian'] ?>"></option>
-                                                <option value="1000">Paket A (1000)</option>
-                                                <option value="2000">Paket B (2000)</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <span class="caption" name="berat_cucian"></span>
-                                            <input type="number" name="berat_cucian" class="editor" value="<?php echo $dt['berat_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>' id="berat_cucian1" min=0>
-                                        </td>
-                                        <td>
-                                            <span class="caption" name="parfum_cucian"></span>
-                                            <select name="parfum_cucian" class="editor" id="parfum_cucian1">
-                                                <option value="<?php echo $dt['parfum_cucian'] ?>"></option>
-                                                <option value="1000">Parfum A (1000)</option>
-                                                <option value="2000">Parfum B (2000)</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <span class="caption" name="total_pemesanan"></span>
-                                            <input type="text" name="total_pemesanan" class="editor" value="<?php echo $dt['total_pemesanan'] ?>" data-id="<?php echo $dt['id_pemesanan'] ?>">
-                                        </td>
-                                        <td>
-                                            <span class="caption" name="no_telp_customer"></span>
-                                            <input type="text" name="no_telp_customer" class="editor" value="<?php echo $dt['no_telp_customer'] ?>">
-                                        </td>
-                                        <td>
-                                            <span class="caption" name="status"></span>
-                                            <select name="status" class="editor">
-                                                <option value="<?php echo $dt['status'] ?>"></option>
-                                                <option value="0">Tunggu</option>
-                                                <option value="1">Cuci - Siap Ambil</option>
-                                                <option value="2">Dryer - Siap Ambil</option>
-                                                <option value="3">Setrika - Siap Ambil</option>
-                                                <option value="4">Selesai</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <div class="row">
-                                                <div class="col-sm-6 mb-1">
-                                                    <form action="<?= base_url('admin/hapuspemesanan'); ?>" class="text-center" method="POST">
-                                                        <input type="hidden" name="id_pemesanan" value="<?php echo $dt['id_pemesanan']; ?>">
-                                                        <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Inactive" onclick="return confirm('Apakah anda yakin menghapus data ini ?');">
-                                                            <i class="now-ui-icons ui-1_simple-remove"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <form action="<?= base_url('admin/printpemesanan'); ?>" class=" text-center" method="POST">
-                                                <input type="hidden" name="id_pemesanan" value="<?php echo $dt['id_pemesanan']; ?>">
-                                                <input type="hidden" name="no_pemesanan" value="<?php echo $dt['no_pemesanan']; ?>">
-                                                <button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Cetak Struk">
-                                                    <i class="now-ui-icons files_paper"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <form action="" class=" text-center">
-                                                <input type="hidden" name="" id="">
-                                                <button type="submit" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Cetak Struk">
-                                                    <i class="now-ui-icons ui-1_send"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <button type="submit" class="btn btn-primary" title="Lihat" data-id="<?php echo $dt['id_pemesanan'] ?>">
-                                                <i class="now-ui-icons ui-1_zoom-bold"></i>
-                                            </button>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

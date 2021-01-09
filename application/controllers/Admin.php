@@ -98,40 +98,7 @@ class Admin extends CI_Controller
                 if ($query) {
                     return $this->cetakpemesanan($data_pemesanan['no_pemesanan']);
                 }
-            } else {
-                $no_pemesanan = $this->input->post('no_pemesanan');
-                $nm_customer = $this->input->post('nama_customer');
-                $nm_kasir = $this->input->post('nama_kasir');
-                $no_telp_customer = $this->input->post('no_telp_customer');
-                $status = $this->input->post('status');
-                $berat  = $this->input->post('berat');
-                $paket  = $this->input->post('paket');
-                $jenis  = $this->input->post('jenis');
-                $parfum = $this->input->post('parfum');
-                $subttl = $this->input->post('item_total');
-                // $id_pemesanan;
-
-                for ($i = 0; $i < count($berat); $i++) {
-
-                    $data = array(
-                        'no_pemesanan'      => $no_pemesanan,
-                        'nama_customer'     => $nm_customer,
-                        'nama_kasir'        => $nm_kasir,
-                        'jenis_cucian'      => $jenis[$i],
-                        'paket_cucian'      => $paket[$i],
-                        'berat_cucian'      => $berat[$i],
-                        'parfum_cucian'     => $parfum[$i],
-                        'no_telp_customer'  => $no_telp_customer,
-                        'status'            => $status,
-                        'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $subttl[$i]),
-                        'id_user'           => $this->session->userdata('id_entitas')
-                    );
-                    $query = $this->db->insert('data_pemesanan', $data);
-                }
-                if ($query) {
-                    $this->cetakpemesanan($no_pemesanan);
-                }
-            }
+            } 
         }
     }
     // autofil data pemesanan
@@ -167,14 +134,7 @@ class Admin extends CI_Controller
 
         $data = array(
             'nama_customer' => $this->input->post('nama_customer'),
-            'no_telp_customer' => $this->input->post('no_telp_customer'),
-            'jenis_cucian' => $this->input->post('jenis_cucian'),
-            'paket_cucian' => $this->input->post('paket_cucian'),
-            'berat_cucian' => $this->input->post('berat_cucian'),
-            'parfum_cucian' => $this->input->post('parfum_cucian'),
-            'total_pemesanan' => preg_replace('/,.*|[^0-9]/', '', $this->input->post('total_pemesanan')),
-            'no_telp_customer' => $this->input->post('no_telp_customer'),
-            'status' => $this->input->post('status'),
+            'no_telp_customer' => $this->input->post('no_telp_customer')
         );
         $this->db->where($where);
         $this->db->update('data_pemesanan', $data);

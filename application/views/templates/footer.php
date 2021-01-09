@@ -176,12 +176,16 @@
             })
         });
     });
+    let one_click = (status, tombol)=>{
+        tombol.disabled = status;
+        return true;
+    }
 
     let filtering = (from, to) => {
         $.ajax({
             dataType: "json",
             method: "POST",
-            cache: "false",
+            cache: "true",
             data: {
                 from_date: from,
                 to_date: to
