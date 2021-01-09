@@ -6,10 +6,10 @@ class Admin extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->library('form_validation');
         $this->load->library('pdf');
         $this->load->model('admin/Data_pemesanan_model', 'data_pemesanan');
         $this->load->model('admin/Absensi_pegawai_model', 'data_absen');
+        $this->load->model('admin/Stok_barang_model', 'stok_barang');
         is_logged_in();
     }
 
@@ -63,11 +63,23 @@ class Admin extends CI_Controller
 
     public function coba()
     {
-        $this->form_validation->set_rules('nama_customer', 'Nama_customer', 'required|trim|xss_clean', [
+        $this->form_validation->set_rules('nama_customer', 'Nama_customer', 'required|trim', [
             'required' => 'Nama Customer tidak boleh kosong !'
         ]);
-        $this->form_validation->set_rules('no_telp_customer', 'No_telp_Customer', 'required|trim|xss_clean', [
-            'required' => 'No Telp tidak boleh kosong !'
+        $this->form_validation->set_rules('status', 'Status', 'required|trim', [
+            'required' => 'Status tidak boleh kosong !'
+        ]);
+        $this->form_validation->set_rules('berat[]', 'Berat', 'required|numeric|regex_match[/^[5-99]/]', [
+            'required' => 'Berat tidak boleh kosong !',
+            'regex_match' => 'Pesanan tidak boleh lebih rendah dari 5 Kg',
+        ]);
+        $this->form_validation->set_rules('bayar', 'Bayar', 'required|trim', [
+            'required' => 'Bayar tidak boleh kosong !'
+        ]);
+        $this->form_validation->set_rules('no_telp_customer', 'No_telp_Customer', 'required|trim|numeric|max_length[14]', [
+            'required' => 'No Telp tidak boleh kosong !',
+            'numeric' => 'Kolom harus berisi angka !',
+            'max_length' => 'Kolom harus berisi maximal 14 karakter !',
         ]);
 
         if ($this->form_validation->run() == false) {
@@ -234,6 +246,7 @@ class Admin extends CI_Controller
     public function kode()
     {
         date_default_timezone_set('Asia/Jakarta');
+        //ini biar dilaptopku ngepas antara jam laptop dan jam di web
         $tgl = date('d/m/', strtotime('-1 day', strtotime(date('d:m'))));
         $tahun = date('Y');
         $this->db->like('no_pemesanan', $tgl);
@@ -320,7 +333,6 @@ class Admin extends CI_Controller
 
 
 
-
     //==================================== Area untuk Stok Barang admin ====================================
     public function stok_barang()
     {
@@ -328,11 +340,78 @@ class Admin extends CI_Controller
         $data['title_nav'] = "Stok Barang";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/navbar', $data);
-        $this->load->view('admin/stok_barang', $data);
-        $this->load->view('templates/footer');
+        $id_entitas = $this->session->userdata('id_entitas');
+        $data['stok'] = $this->stok_barang->getStokBarang($id_entitas);
+        $data['jenis'] = $this->stok_barang->getJenisCuci($id_entitas);
+        $data['paket'] = $this->stok_barang->getPaketCuci($id_entitas);
+        $data['bahan'] = $this->stok_barang->getBahanCuci($id_entitas);
+
+        $this->form_validation->set_rules('kode_barang', 'Kode Barang', 'required|trim', [
+            'required' => 'Kode Barang tidak boleh kosong !'
+        ]);
+        $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'required|trim', [
+            'required' => 'Nama Barang tidak boleh kosong !'
+        ]);
+        $this->form_validation->set_rules('tanggal_barang', 'Tanggal Barang', 'required|trim', [
+            'required' => 'Tanggal Barang tidak boleh kosong !'
+        ]);
+        $this->form_validation->set_rules('harga_satuan[]', 'Harga Satuan', 'required|regex_match[/^[0-999999]/]', [
+            'required' => 'Harga Satuan tidak boleh kosong !',
+            'regex_match' => 'Isian tidak boleh lebih rendah dari 0 !'
+        ]);
+        $this->form_validation->set_rules('jumlah_barang[]', 'Jumlah barang', 'required|numeric|regex_match[/^[0-99]/]', [
+            'required' => 'Jumlah Barang tidak boleh kosong !',
+            'numeric' => 'Isian harus berformat angka !',
+            'regex_match' => 'Isian tidak boleh lebih rendah dari 0 !'
+        ]);
+        $this->form_validation->set_rules('digunakan[]', 'Digunakan', 'required|numeric|regex_match[/^[0-99]/]', [
+            'required' => 'Digunakan tidak boleh kosong !',
+            'numeric' => 'Isian harus berformat angka !',
+            'regex_match' => 'Isian tidak boleh lebih rendah dari 0 !'
+        ]);
+        $this->form_validation->set_rules('tersedia[]', 'Tersedia', 'required|trim', [
+            'required' => 'Tersedia tidak boleh kosong !',
+        ]);
+        $this->form_validation->set_rules('total_harga_barang', 'Total Harga', 'required|trim', [
+            'required' => 'Total Harga tidak boleh kosong !',
+        ]);
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/navbar', $data);
+            $this->load->view('admin/stok_barang', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $data = [
+                'kode_barang' => $this->input->post('kode_barang'),
+                'nama_barang' => $this->input->post('nama_barang'),
+                'harga_satuan' => $this->input->post('harga_satuan'),
+                'jumlah_barang' => $this->input->post('jumlah_barang'),
+                'total_harga_barang' => $this->input->post('total_harga_barang'),
+                'digunakan' => $this->input->post('digunakan'),
+                'tersedia' => $this->input->post('tersedia'),
+                'tanggal_barang' => $this->input->post('tanggal_barang'),
+                'active' => 1,
+                'id_user' => $this->session->userdata('id_entitas'),
+            ];
+            $stok = $this->stok_barang->insertStokBarang($data);
+            if ($stok == true) {
+                $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Stok Barang Sukses disimpan !
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>');
+                redirect('admin/stok_barang');
+            } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Stok Barang Gagal disimpan :( !
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>');
+                redirect('admin/stok_barang');
+            }
+        }
     }
     //==================================== Area untuk Stok Barang admin ====================================
 

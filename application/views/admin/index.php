@@ -3,7 +3,7 @@
 <div class="content mt-5">
     <!-- Input Data Pemesanan -->
     <div class="row justify-content-center">
-        <div class="col-lg-7">
+        <div class="col-lg-9">
             <div class="card">
                 <div class="card-header">
                     <?= $this->session->flashdata('message') ?>
@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-lg-7">
+        <div class="col-lg-9">
             <div class="card">
                 <div class="card-header">
                     <div class="row">
@@ -32,7 +32,8 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="nama_customer">Nama Customer</label>
-                                    <input type="text" class="form-control autofill" name="nama_customer" id="nama_customer" <?php echo form_error('nama_customer', '<small class="text-danger">', '</small>'); ?>>
+                                    <input type="text" class="form-control autofill" name="nama_customer" id="nama_customer" value="<?= set_value('nama_customer') ?>">
+                                    <?= form_error('nama_customer', '<small class="text-danger">', '</small>'); ?>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="nama_kasir">Nama Kasir</label>
@@ -46,19 +47,21 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">+62</div>
                                         </div>
-                                        <input type="number" class="form-control" name="no_telp_customer" id="no_telp_customer" placeholder="85..." <?php echo form_error('no_telp_customer', '<small class="text-danger">', '</small>'); ?>>
+                                        <input type="tel" class="form-control" name="no_telp_customer" id="no_telp_customer" placeholder="85..." value="<?= set_value('no_telp_customer') ?>">
                                     </div>
+                                    <?= form_error('no_telp_customer', '<small class="text-danger">', '</small>'); ?>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="status">Status</label>
                                     <select id="status" class="form-control" name="status">
-                                        <option selected>Pilih...</option>
+                                        <option value="">Pilih...</option>
                                         <option value="0">Tunggu</option>
                                         <option value="1">Cuci - Siap Ambil</option>
                                         <option value="2">Dryer - Siap Ambil</option>
                                         <option value="3">Setrika - Siap Ambil</option>
                                         <option value="4">Selesai</option>
                                     </select>
+                                    <?= form_error('status', '<small class="text-danger">', '</small>'); ?>
                                 </div>
                             </div>
                             <hr>
@@ -69,7 +72,7 @@
                                             <div class="table-responsive table-hover table-striped">
                                                 <table name="cart" class="table">
                                                     <tr>
-                                                        <th>Action</th>
+                                                        <th>Tindakan</th>
                                                         <th>Berat</th>
                                                         <th>Paket</th>
                                                         <th>Jenis</th>
@@ -84,45 +87,57 @@
                                                             </button>
                                                         </td>
 
-                                                        <td><input class="form-control" type="number" name="berat[]" id="berat"> </td>
                                                         <td>
-                                                            <select class="form-control" name="paket[]" id="paket">
+                                                            <input type="number" name="berat[]" id="berat" value="<?= set_value('berat[]') ?>">
+                                                            <?= form_error('berat[]', '<small class="text-danger">', '</small>'); ?>
+                                                        </td>
+                                                        <td>
+                                                            <select name="paket[]" id="paket">
                                                                 <option value="1000">Paket A</option>
                                                                 <option value="2000">Paket B</option>
                                                             </select>
                                                         </td>
                                                         <td>
-                                                            <select class="form-control" name="jenis[]" id="jenis">
+                                                            <select name="jenis[]" id="jenis">
                                                                 <option value="1000">Jenis A</option>
                                                                 <option value="2000">Jenis B</option>
                                                             </select>
                                                         </td>
                                                         <td>
-                                                            <select class="form-control" name="parfum[]" id="parfum">
+                                                            <select name="parfum[]" id="parfum">
                                                                 <option value="1000">Parfum A</option>
                                                                 <option value="2000">Parfum B</option>
                                                             </select>
                                                         </td>
                                                         <td>&nbsp;</td>
-                                                        <td><input type="text" class="form-control" name="item_total" id="item_total" value="" jAutoCalc="{#berat} * ({#paket} + {#jenis} + {#parfum})"></td>
+                                                        <td>
+                                                            <input type="text" name="item_total" id="item_total" value="" jAutoCalc="{#berat} * ({#paket} + {#jenis} + {#parfum})">
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4">&nbsp;</td>
                                                         <td>Harga Total</td>
                                                         <td>&nbsp;</td>
-                                                        <td><input type="text" class="form-control" name="harga_total" id="harga_total" value="" jAutoCalc="SUM({item_total})"></td>
+                                                        <td> 
+                                                            <input type="text" name="harga_total" id="harga_total" value="" jAutoCalc="SUM({item_total})">
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4">&nbsp;</td>
                                                         <td>Bayar</td>
                                                         <td>&nbsp;</td>
-                                                        <td><input type="text" class="form-control" name="bayar" id="bayar" value="" id="bayar"></td>
+                                                        <td>
+                                                                <input type="text"  name="bayar" id="bayar" value="<?= set_value('bayar'); ?>" id="bayar">
+                                                                <?= form_error('bayar', '<small class="text-danger">', '</small>'); ?>
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4">&nbsp;</td>
                                                         <td>Kembalian</td>
                                                         <td>&nbsp;</td>
-                                                        <td><input type="text" class="form-control" name="kembalian" value="" jAutoCalc="{#bayar} - {#harga_total}"></td>
+                                                        <td>
+                                                                <input type="text"  name="kembalian" value="" jAutoCalc="{#bayar} - {#harga_total}">
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="99">
@@ -165,16 +180,16 @@
                                 <input type="date" id="to-date" name="trip-start" value="<?php echo date("d-m-Y"); ?>" class="form-control">
                             </div>
                         </form>
-                        <table id="list_pemesanan" class="table">
+                        <table id="list_pemesanan" class="table" name="cart">
                             <thead class="text-primary">
                                 <tr>
                                     <th>No</th>
                                     <th>No Pemesanan</th>
                                     <th>Nama Customer</th>
                                     <th>Nama Kasir</th>
+                                    <th>Berat Cucian</th>
                                     <th>Jenis Cucian</th>
                                     <th>Paket Cucian</th>
-                                    <th>Berat Cucian</th>
                                     <th>Parfum Cucian</th>
                                     <th>Sub Total</th>
                                     <th>No. Telp</th>
@@ -189,7 +204,7 @@
                                 $no = 1;
                                 foreach ($data_pemesanan as $dt) {
                                 ?>
-                                <tr class="data-row-asli" id="data-row">
+                                <tr class="data-row-asli" id="data-row" name="list_data_pesan">
                                     <td><span><?php echo $no++ ?></span></td>
                                     <td>
                                         <span class="caption" name="no_pemesanan" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['no_pemesanan']; ?></span>
@@ -204,50 +219,50 @@
                                         <input type="text" name="nama_kasir" value="<?php echo $dt['nama_kasir']; ?>" class="editor" data-id='<?php echo $dt['id_pemesanan'] ?>' disabled>
                                     </td>
                                     <td>
-                                        <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>' name="jenis_cucian"><?php echo $dt['jenis_cucian']; ?></span>
+                                        <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>' name="berat_cucian"><?php echo $dt['berat_cucian']; ?></span>
+                                        <input type="number" name="berat_cucian" class="editor" value="<?php echo $dt['berat_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>' id="berat_cucian1" min=0>
+                                    </td>
+                                    <td>
+                                        <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>' name="jenis_cucian"><?= ($dt['jenis_cucian'] == '1000' ? 'Jenis A' : 'Jenis B'); ?></span>
                                         <select name="jenis_cucian" class="editor" id="jenis_cucian1">
-                                            <option value="<?php echo $dt['jenis_cucian'] ?>"><?php echo $dt['parfum_cucian'] ?></option>
+                                            <option value="<?= $dt['jenis_cucian'] ?>"><?= ($dt['jenis_cucian'] == 1000 ? 'Jenis A' : 'Jenis B') ?></option>
                                             <option value="1000">Jenis A (1000)</option>
                                             <option value="2000">Jenis B (2000)</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>'  name="paket_cucian"><?php echo $dt['paket_cucian']; ?></span>
+                                        <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>'  name="paket_cucian"><?= ($dt['paket_cucian'] == '1000' ? 'Paket A' : 'Paket B'); ?></span>
                                        <select name="paket_cucian" class="editor" id="paket_cucian1">
-                                            <option value="<?php echo $dt['paket_cucian'] ?>"><?php echo $dt['parfum_cucian'] ?></option>
+                                            <option value="<?= $dt['paket_cucian'] ?>"><?= ($dt['paket_cucian'] == 1000 ? 'Paket A' : 'Paket B') ?></option>
                                             <option value="1000">Paket A (1000)</option>
                                             <option value="2000">Paket B (2000)</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>' name="berat_cucian"><?php echo $dt['berat_cucian']; ?></span>
-                                        <input type="number" name="berat_cucian" class="editor" value="<?php echo $dt['berat_cucian'] ?>" data-id='<?php echo $dt['id_pemesanan'] ?>' id="berat_cucian1" min=0>
-                                    </td>
-                                    <td>
-                                        <span class="caption" name="parfum_cucian" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['parfum_cucian']; ?></span>
+                                        <span class="caption" name="parfum_cucian" data-id='<?php echo $dt['id_pemesanan'] ?>'><?= ($dt['parfum_cucian'] == '1000' ? 'Parfum A' : 'Parfum B'); ?></span>
                                         <select name="parfum_cucian" class="editor" id="parfum_cucian1">
-                                            <option value="<?php echo $dt['parfum_cucian'] ?>"><?php echo $dt['parfum_cucian'] ?></option>
-                                            <option value="1000">Parfum A</option>
-                                            <option value="2000">Parfum B</option>
+                                            <option value="<?= $dt['parfum_cucian'] ?>"><?= ($dt['parfum_cucian'] == 1000 ? 'Parfum A' : 'Parfum B') ?></option>
+                                            <option value="1000">Parfum A (1000)</option>
+                                            <option value="2000">Parfum B (2000)</option>
                                         </select>
                                     </td>
                                     <td>
                                         <span class="caption" name="total_pemesanan" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['total_pemesanan'] ?></span>
-                                        <input type="text" name="total_pemesanan" class="editor" value="<?php echo $dt['total_pemesanan'] ?>" data-id="<?php echo $dt['id_pemesanan'] ?>">
+                                        <input type="text" name="total_pemesanan" class="editor" value="<?php echo $dt['total_pemesanan'] ?>" jAutoCalc="{#berat_cucian1} * ({#jenis_cucian1} + {#paket_cucian1} + {#parfum_cucian1})" data-id="<?php echo $dt['id_pemesanan'] ?>">
                                     </td>
                                     <td>
                                         <span class="caption" name="no_telp_customer" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['no_telp_customer']; ?></span>
                                         <input type="text" name="no_telp_customer" class="editor" data-id="<?php echo $dt['id_pemesanan'] ?>" value="<?php echo $dt['no_telp_customer'] ?>">
                                     </td>
                                     <td>
-                                        <span class="caption" name="status" data-id='<?php echo $dt['status'] ?>'><?php echo $dt['status']; ?></span>
+                                        <span class="caption" name="status" data-id='<?php echo $dt['status'] ?>'><?= ($dt['status'] == '0' ? 'Tunggu' : ($dt['status'] == '1' ? 'Cuci - Siap Ambil' : ($dt['status'] == '2' ? 'Dryer - Siap Ambil' : ($dt['status'] == '3' ? 'Setrika - Siap Ambil' : ($dt['status'] == '4' ? 'Selesai' : ''))))); ?></span>
                                         <select name="status" class="editor">
-                                            <option value="<?php echo $dt['status'] ?>"><?php echo $dt['status'] ?></option>
-                                            <option value="tunggu">Tunggu</option>
-                                            <option value="cuci">Cuci - Siap Ambil</option>
-                                            <option value="dryer">Dryer - Siap Ambil</option>
-                                            <option value="setrika">Setrika - Siap Ambil</option>
-                                            <option value="selesai">Selesai</option>
+                                            <option value="<?php echo $dt['status'] ?>"><?= ($dt['status'] == 0 ? 'Tunggu' : ($dt['status'] == 1 ? 'Cuci - Siap Ambil' : ($dt['status'] == 2 ? 'Dryer - Siap Ambil' : ($dt['status'] == 3 ? 'Setrika - Siap Ambil' : ($dt['status'] == 4 ? 'Selesai' : ''))))) ?></option>
+                                            <option value="0">Tunggu</option>
+                                            <option value="1">Cuci - Siap Ambil</option>
+                                            <option value="2">Dryer - Siap Ambil</option>
+                                            <option value="3">Setrika - Siap Ambil</option>
+                                            <option value="4">Selesai</option>
                                         </select>
                                     </td>
                                     <td>
@@ -327,8 +342,8 @@
                                         <span class="caption" name="parfum_cucian"></span>
                                         <select name="parfum_cucian" class="editor" id="parfum_cucian1">
                                             <option value="<?php echo $dt['parfum_cucian'] ?>"></option>
-                                            <option value="1000">Parfum A</option>
-                                            <option value="2000">Parfum B</option>
+                                            <option value="1000">Parfum A (1000)</option>
+                                            <option value="2000">Parfum B (2000)</option>
                                         </select>
                                     </td>
                                     <td>
@@ -343,11 +358,11 @@
                                         <span class="caption" name="status"></span>
                                         <select name="status" class="editor">
                                             <option value="<?php echo $dt['status'] ?>"></option>
-                                            <option value="tunggu">Tunggu</option>
-                                            <option value="cuci">Cuci - Siap Ambil</option>
-                                            <option value="dryer">Dryer - Siap Ambil</option>
-                                            <option value="setrika">Setrika - Siap Ambil</option>
-                                            <option value="selesai">Selesai</option>
+                                            <option value="0">Tunggu</option>
+                                            <option value="1">Cuci - Siap Ambil</option>
+                                            <option value="2">Dryer - Siap Ambil</option>
+                                            <option value="3">Setrika - Siap Ambil</option>
+                                            <option value="4">Selesai</option>
                                         </select>
                                     </td>
                                     <td>

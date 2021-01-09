@@ -12,56 +12,85 @@
                      </div>
                  </div>
                  <div class="card-body">
-                     <form action="" name="formStok">
-                         <div class="control-group after-add-more">
+                     <form action="<?= base_url('admin/stok_barang') ?>" name="cart" method="POST">
+                         <div class="control-group">
                              <div class="form-row">
-                                 <div class="form-group col-md-4">
-                                     <label for="nama_barang">Nama Barang</label>
-                                     <input type="text" class="form-control" name="nama_barang[]" id="nama_barang" placeholder="So Klin . . .">
-                                 </div>
-                                 <div class="form-group col-md-4">
-                                     <label for="kode_barang">Kode Barang</label>
-                                     <input type="text" class="form-control" name="kode_barang[]" id="kode_barang" placeholder="cth : 20/12/b0001">
-                                 </div>
-                                 <div class="form-group col-md-4">
-                                     <label for="tanggal_barang">Tanggal</label>
-                                     <input type="date" class="form-control" name="tanggal_barang[]" id="tanggal_barang">
-                                 </div>
-                             </div>
-                             <div class="form-row">
-                                 <div class="form-group col-md-3">
-                                     <label for="harga_satuan">Harga Satuan</label>
-                                     <div class="input-group mb-2">
-                                         <div class="input-group-prepend">
-                                             <div class="input-group-text">Rp</div>
-                                         </div>
-                                         <input type="text" class="form-control" name="harga_satuan[]" id="harga_satuan">
-                                     </div>
-                                 </div>
-                                 <div class="form-group col-md-3">
-                                     <label for="jumlah">Jumlah</label>
-                                     <input type="number" class="form-control" name="jumlah[]" id="jumlah" placeholder="1">
-                                 </div>
-                                 <div class="form-group col-md-3">
-                                     <label for="digunakan">Digunakan</label>
-                                     <input type="number" class="form-control" name="digunakan[]" id="digunakan" placeholder="1">
-                                 </div>
-                                 <div class="form-group col-md-3">
-                                     <label for="tersedia">Tersedia</label>
-                                     <input type="number" class="form-control" name="tersedia[]" id="tersedia" placeholder="1">
-                                 </div>
-                             </div>
-                             <div class="form-row">
-                                 <div class="form-group col-md-3">
-                                     <label for="total_harga">Total Harga</label>
-                                     <div class="input-group mb-2">
-                                         <div class="input-group-prepend">
-                                             <div class="input-group-text">Rp</div>
-                                         </div>
-                                         <input type="text" class="form-control money" name="total_harga[]" id="total_harga">
-                                     </div>
-                                 </div>
-                             </div>
+                                 <div class="form-group col-md-12">
+                                     <div class="card">
+                                         <div class="card-body">
+                                             <div class="table-responsive table-hover table-striped">
+                                                 <table name="cart" class="table">
+                                                     <tr>
+                                                         <th>Tindakan</th>
+                                                         <th>Harga Satuan</th>
+                                                         <th>Jumlah Barang</th>
+                                                         <th>Total Harga</th>
+                                                         <th>Digunakan</th>
+                                                         <th>&nbsp;</th>
+                                                         <th>Tersedia</th>
+                                                     </tr>
+                                                     <tr name="line_items">
+                                                         <td>
+                                                             <button class="btn btn-danger btn-fab btn-icon btn-round btn-sm" data-toggle="tooltip" data-placement="top" title="Tambah Form Data" name="remove">
+                                                                 <i class="now-ui-icons ui-1_simple-delete"></i>
+                                                             </button>
+                                                         </td>
+                                                         <td>
+                                                             <div class="input-group mb-2">
+                                                                 <div class="input-group-prepend">
+                                                                     <div class="input-group-text">Rp</div>
+                                                                 </div>
+                                                                 <input class="form-control" type="text" name="harga_satuan[]" id="harga_satuan" value="<?= set_value('harga_satuan[]') ?>">
+                                                             </div>
+                                                             <?= form_error('harga_satuan[]', '<small class="text-danger">', '</small>'); ?>
+                                                         </td>
+                                                         <td>
+                                                             <input class="form-control" type="number" name="jumlah_barang[]" id="jumlah_barang" value="<?= set_value('jumlah_barang[]') ?>">
+                                                             <?= form_error('jumlah_barang[]', '<small class="text-danger">', '</small>'); ?>
+                                                         </td>
+                                                         <td>
+                                                             <div class="input-group mb-2">
+                                                                 <div class="input-group-prepend">
+                                                                     <div class="input-group-text">Rp</div>
+                                                                 </div>
+                                                                 <input type="text" class="form-control" name="total_harga_barang" id="total_harga_barang" value="" jAutoCalc="{#harga_satuan} * {#jumlah_barang}">
+                                                            </div>
+                                                        </td>
+                                                         <td>
+                                                             <input type="number" class="form-control" name="digunakan[]" id="digunakan" value="<?= set_value('digunakan[]') ?>">
+                                                             <?= form_error('digunakan[]', '<small class="text-danger">', '</small>'); ?>
+                                                         </td>
+                                                         <td>&nbsp;</td>
+                                                         <td name="ter_one">
+                                                             <input type="text" class="form-control" name="tersedia[]" id="tersedia" value="" jAutoCalc="{#jumlah_barang} - {#digunakan}">
+                                                         </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4">&nbsp;</td>
+                                                        <td class="text-right">Grand Total</td>
+                                                        <td>&nbsp;</td>
+                                                        <td>
+                                                            <div class="input-group mb-2">
+                                                                 <div class="input-group-prepend">
+                                                                     <div class="input-group-text">Rp</div>
+                                                                 </div>
+                                                                <input type="text" class="form-control" name="harga_total" id="harga_total" value="" jAutoCalc="SUM({total_harga_barang})">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="99">
+                                                            <button class="btn btn-info btn-fab btn-icon btn-round btn-sm" data-toggle="tooltip" data-placement="top" title="Tambah Form Data" name="add">
+                                                                <i class="now-ui-icons ui-1_simple-add"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                              <button type="submit" class="btn btn-info">Simpan</button>
                          </div>
                      </form>
