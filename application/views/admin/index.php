@@ -6,6 +6,7 @@
         <div class="col-lg-7">
             <div class="card">
                 <div class="card-header">
+                    <?= $this->session->flashdata('message') ?>
                     <h5 class="text-center">Selamat Datang <?= $user['name']; ?></h5>
                 </div>
             </div>

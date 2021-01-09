@@ -9,6 +9,7 @@ class Admin extends CI_Controller
         $this->load->library('form_validation');
         $this->load->library('pdf');
         $this->load->model('admin/Data_pemesanan_model', 'data_pemesanan');
+        $this->load->model('admin/Absensi_pegawai_model', 'data_absen');
         is_logged_in();
     }
 
@@ -220,6 +221,7 @@ class Admin extends CI_Controller
     }
     //==================================== Area untuk dashboard/index admin ====================================
 
+<<<<<<< Updated upstream
     public function filtering(){
         $data1 = $this->input->post('from_date');
         $data2 = $this->input->post('to_date');
@@ -251,6 +253,96 @@ class Admin extends CI_Controller
               $kodetampil = $tgl.'V'.$tahun.$batas;  //format kode
               return $kodetampil;  
          }
+=======
+
+
+
+    //==================================== Area untuk Absensi Pegawai admin ====================================
+    public function absensi_pegawai()
+    {
+        $data['title'] = "Absensi Pegawai";
+        $data['title_nav'] = "Absensi Pegawai";
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+        $id_entitas = $this->session->userdata('id_entitas');
+        $data['data_absen'] = $this->data_absen->getDataAbsen($id_entitas);
+
+        $this->form_validation->set_rules('nama_pegawai', 'Nama Pegawai', 'required|trim', [
+            'required' => 'Kolom input tidak boleh kosong',
+        ]);
+        $this->form_validation->set_rules('tanggal_hadir', 'Tanggal Hadir', 'required|trim', [
+            'required' => 'Kolom input tidak boleh kosong',
+        ]);
+        $this->form_validation->set_rules('presensi', 'Presensi', 'required|trim', [
+            'required' => 'Kolom input tidak boleh kosong',
+        ]);
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/navbar', $data);
+            $this->load->view('admin/absensi_pegawai', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $data = [
+                'nama_pegawai' => $this->input->post('nama_pegawai'),
+                'tanggal_hadir' => $this->input->post('tanggal_hadir'),
+                'jam_masuk' => date('H:i', strtotime('+9 hour', strtotime(date('H:i:s')))),
+                'presensi' => $this->input->post('presensi'),
+                'id_user' => $this->session->userdata('id_entitas'),
+            ];
+            $data_absen = $this->db->insert('absensi_pegawai', $data);
+            if ($data_absen == true) {
+                $this->session->set_flashdata(
+                    'message',
+                    '<div class="alert alert-success" role="alert"> Presensi Berhasil ! 
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>'
+                );
+                redirect('admin/absensi_pegawai');
+            } else {
+                $this->session->set_flashdata(
+                    'message',
+                    '<div class="alert alert-danger" role="alert"> Presensi Gagal ! 
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>'
+                );
+                redirect('admin/absensi_pegawai');
+            }
+        }
+    }
+    //==================================== Area untuk Absensi Pegawai admin ====================================
+
+
+
+
+
+
+    //==================================== Area untuk Stok Barang admin ====================================
+    public function stok_barang()
+    {
+        $data['title'] = "Stok Barang";
+        $data['title_nav'] = "Stok Barang";
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/navbar', $data);
+        $this->load->view('admin/stok_barang', $data);
+        $this->load->view('templates/footer');
+    }
+    //==================================== Area untuk Stok Barang admin ====================================
+
+
+
+
+
+
+>>>>>>> Stashed changes
 
     public function my_profile()
     {

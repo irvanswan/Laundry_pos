@@ -19,16 +19,10 @@
                     <div class="row">
                         <div class="col-md-7">
                             <h4 class="card-title">Form Tambah User Admin</h4>
-                            <!-- <h5 class="card-category">Data ke - 1</h5> -->
                         </div>
                         <div class="col-md-5 d-flex flex-row-reverse bd-highlight">
-                            <small class="text-danger text-justify">* Diwajibkan No Identitas Laundry Adminharus sama dengan No Identitas Laundry Manajer saat mendaftar</small>
+                            <small class="text-danger text-justify">* Diwajibkan No Identitas Laundry Admin harus sama dengan No Identitas Laundry Manajer saat mendaftar</small>
                         </div>
-                        <!-- <div class="col-md-3 d-flex flex-row-reverse bd-highlight">
-                                        <button class="btn btn-info btn-fab btn-icon btn-round btn-sm" data-toggle="tooltip" data-placement="top" title="Tambah Form Data" id="add-more">
-                                        <i class="now-ui-icons ui-1_simple-add"></i>
-                                        </button>
-                                    </div> -->
                     </div>
                 </div>
                 <div class="card-body">
@@ -47,27 +41,37 @@
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-3">
                                     <label for="password">Password</label>
                                     <input type="password" class="form-control" name="password" id="password">
                                     <?= form_error('password', '<small class="text-danger">', '</small>'); ?>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-3">
                                     <label for="alamat">Alamat</label>
                                     <input type="text" class="form-control" name="alamat" id="alamat" value="<?= set_value('alamat') ?>">
                                     <?= form_error('alamat', '<small class="text-danger">', '</small>'); ?>
                                 </div>
-                            </div>
-                            <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <label for="name_laundry">Nama Laundry</label>
                                     <input type="text" class="form-control" name="name_laundry" id="name_laundry" value="<?= set_value('name_laundry') ?>">
                                     <?= form_error('name_laundry', '<small class="text-danger">', '</small>'); ?>
                                 </div>
-                                <div class="form-group col-md-5">
+                                <div class="form-group col-md-3">
                                     <label for="id_entitas">No Identitas Laundry</label>
                                     <input type="text" class="form-control" name="id_entitas" id="id_entitas" value="<?= set_value('id_entitas') ?>">
                                     <?= form_error('id_entitas', '<small class="text-danger">', '</small>'); ?>
+                                </div>
+                            </div>
+                            <div class="form-row justify-content-center">
+                                <div class="form-group col-md-2">
+                                    <label for="jam_masuk">Jam Masuk</label>
+                                    <input type="time" class="form-control" name="jam_masuk" id="jam_masuk" value="<?= set_value('jam_masuk') ?>">
+                                    <?= form_error('jam_masuk', '<small class="text-danger">', '</small>'); ?>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="jam_keluar">Jam Pulang</label>
+                                    <input type="time" class="form-control" name="jam_keluar" id="jam_keluar" value="<?= set_value('jam_keluar') ?>">
+                                    <?= form_error('jam_keluar', '<small class="text-danger">', '</small>'); ?>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="no_telp">No Whatsapp Aktif</label>
@@ -75,59 +79,9 @@
                                     <?= form_error('no_telp', '<small class="text-danger">', '</small>'); ?>
                                 </div>
                             </div>
-
-                            <!-- Invisible -->
-
-                            <!-- <div class="copy invisible">
-                                <div class="control-group">
-                                    <hr>
-                                    <div class="col-md-12 d-flex flex-row-reverse bd-highlight">
-                                        <button class="btn btn-warning btn-fab btn-icon btn-round btn-sm d-flex flex-row-reverse bd-highlight remove" data-toggle="tooltip" data-placement="top" title="Reset Form Data" id="">
-                                            <i class="now-ui-icons ui-1_simple-remove"></i>
-                                        </button>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label for="name">Fullname</label>
-                                            <input type="text" class="form-control" name="name" id="name">
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label for="email">Email</label>
-                                            <input type="email" class="form-control" name="email" id="email">
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label for="password1">Password</label>
-                                            <input type="password" class="form-control" name="password1" id="password1">
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label for="alamat">Alamat</label>
-                                            <input type="text" class="form-control" name="alamat" id="alamat">
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group col-md-3">
-                                            <label for="laundry_name">Nama Laundry</label>
-                                            <input type="text" class="form-control" name="laundry_name" class="laundry_name" id="laundry_name">
-                                        </div>
-                                        <div class="form-group col-md-5">
-                                            <label for="no_identitas">No Identitas Laundry</label>
-                                            <input type="number" class="form-control" name="no_identitas" class="no_identitas" id="no_identitas">
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label for="no_telp">No Whatsapp Aktif</label>
-                                            <input type="tel" class="form-control" name="no_telp" class="no_telp" id="no_telp">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
-
-                            <!-- <div id="insert-form"></div> -->
                             <button type="submit" class="btn btn-info ">Simpan</button>
                         </div>
                     </form>
-                    <!-- <input type="hidden" id="jumlah-form" value="1"> -->
                 </div>
             </div>
         </div>
@@ -153,6 +107,8 @@
                                     <th>Alamat</th>
                                     <th>Status</th>
                                     <th>Waktu Daftar</th>
+                                    <th>Jam Kerja</th>
+                                    <th>Jam Pulang</th>
                                     <th class="text-center">Photos</th>
                                     <th class="text-center">Tindakan</th>
                                 </tr>
@@ -168,6 +124,8 @@
                                         <td><?= $musr['alamat']; ?></td>
                                         <td><?= $musr['role_id']; ?></td>
                                         <td><?= date('d F Y', $musr['date_created']); ?></td>
+                                        <td><?= date('H:i', strtotime($musr['jam_masuk'])); ?></td>
+                                        <td><?= date('H:i', strtotime($musr['jam_keluar'])); ?></td>
                                         <td>
                                             <div class="row col-md-5 mx-auto">
                                                 <img class="img-thumbnail" src="<?= base_url('assets/img/profile/') . $musr['image']; ?>" alt="pict">

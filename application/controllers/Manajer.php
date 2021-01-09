@@ -81,6 +81,12 @@ class Manajer extends CI_Controller
             'min_length' => 'Kolom harus berisi minimal 12 karakter !',
             'max_length' => 'Kolom harus berisi maximal 12 karakter !',
         ]);
+        $this->form_validation->set_rules('jam_masuk', 'Jam Masuk', 'required|trim|xss_clean', [
+            'required' => 'Kolom input tidak boleh kosong !'
+        ]);
+        $this->form_validation->set_rules('jam_keluar', 'Jam Keluar', 'required|trim|xss_clean', [
+            'required' => 'Kolom input tidak boleh kosong !'
+        ]);
         if ($this->form_validation->run() == false) {
             $this->load->view('templates/header', $data);
             $this->load->view('templates/sidebar', $data);
@@ -102,6 +108,8 @@ class Manajer extends CI_Controller
                 'is_active' => 1,
                 'date_created' => time(),
                 'fitur_active' => 1,
+                'jam_masuk' =>  htmlspecialchars($this->input->post('jam_masuk', true)),
+                'jam_keluar' => htmlspecialchars($this->input->post('jam_keluar', true)),
                 'date_active' => date('Y-m-d'),
                 'date_expired' => date('Y-m-d', strtotime('+1 month', strtotime(date('Y-m-d')))),
             ];
@@ -195,6 +203,8 @@ class Manajer extends CI_Controller
                 'name_laundry' => htmlspecialchars($this->input->post('name_laundry', true)),
                 'no_telp' => htmlspecialchars($this->input->post('no_telp', true)),
                 'is_active' =>  htmlspecialchars($this->input->post('is_active', true)),
+                'jam_masuk' =>  htmlspecialchars($this->input->post('jam_masuk', true)),
+                'jam_keluar' => htmlspecialchars($this->input->post('jam_keluar', true)),
             ];
             $id = array(
                 'id' => $this->input->post('id'),
