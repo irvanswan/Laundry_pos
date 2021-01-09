@@ -53,11 +53,11 @@
                                     <label for="status">Status</label>
                                     <select id="status" class="form-control" name="status">
                                         <option selected>Pilih...</option>
-                                        <option value="tunggu">Tunggu</option>
-                                        <option value="cuci">Cuci - Siap Ambil</option>
-                                        <option value="dryer">Dryer - Siap Ambil</option>
-                                        <option value="setrika">Setrika - Siap Ambil</option>
-                                        <option value="selesai">Selesai</option>
+                                        <option value="0">Tunggu</option>
+                                        <option value="1">Cuci - Siap Ambil</option>
+                                        <option value="2">Dryer - Siap Ambil</option>
+                                        <option value="3">Setrika - Siap Ambil</option>
+                                        <option value="4">Selesai</option>
                                     </select>
                                 </div>
                             </div>
@@ -206,7 +206,7 @@
                                     <td>
                                         <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>' name="jenis_cucian"><?php echo $dt['jenis_cucian']; ?></span>
                                         <select name="jenis_cucian" class="editor" id="jenis_cucian1">
-                                            <option value="<?php echo $dt['jenis_cucian'] ?>"><?php echo $dt['parfum_cucian']?></option>
+                                            <option value="<?php echo $dt['jenis_cucian'] ?>"><?php echo $dt['parfum_cucian'] ?></option>
                                             <option value="1000">Jenis A (1000)</option>
                                             <option value="2000">Jenis B (2000)</option>
                                         </select>
@@ -214,7 +214,7 @@
                                     <td>
                                         <span class="caption" data-id='<?php echo $dt['id_pemesanan'] ?>'  name="paket_cucian"><?php echo $dt['paket_cucian']; ?></span>
                                        <select name="paket_cucian" class="editor" id="paket_cucian1">
-                                            <option value="<?php echo $dt['paket_cucian'] ?>"><?php echo $dt['parfum_cucian']?></option>
+                                            <option value="<?php echo $dt['paket_cucian'] ?>"><?php echo $dt['parfum_cucian'] ?></option>
                                             <option value="1000">Paket A (1000)</option>
                                             <option value="2000">Paket B (2000)</option>
                                         </select>
@@ -226,7 +226,7 @@
                                     <td>
                                         <span class="caption" name="parfum_cucian" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['parfum_cucian']; ?></span>
                                         <select name="parfum_cucian" class="editor" id="parfum_cucian1">
-                                            <option value="<?php echo $dt['parfum_cucian'] ?>"><?php echo $dt['parfum_cucian']?></option>
+                                            <option value="<?php echo $dt['parfum_cucian'] ?>"><?php echo $dt['parfum_cucian'] ?></option>
                                             <option value="1000">Parfum A</option>
                                             <option value="2000">Parfum B</option>
                                         </select>
@@ -242,7 +242,7 @@
                                     <td>
                                         <span class="caption" name="status" data-id='<?php echo $dt['status'] ?>'><?php echo $dt['status']; ?></span>
                                         <select name="status" class="editor">
-                                            <option value="<?php echo $dt['status'] ?>"><?php echo $dt['status']?></option>
+                                            <option value="<?php echo $dt['status'] ?>"><?php echo $dt['status'] ?></option>
                                             <option value="tunggu">Tunggu</option>
                                             <option value="cuci">Cuci - Siap Ambil</option>
                                             <option value="dryer">Dryer - Siap Ambil</option>

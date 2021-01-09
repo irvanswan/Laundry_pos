@@ -66,11 +66,11 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('nama_customer', 'Nama_customer', 'required|trim|xss_clean', [
             'required' => 'Nama Customer tidak boleh kosong !'
         ]);
-        $this->form_validation->set_rules('no_telp_customer','No_telp_Customer','required|trim|xss_clean',[
+        $this->form_validation->set_rules('no_telp_customer', 'No_telp_Customer', 'required|trim|xss_clean', [
             'required' => 'No Telp tidak boleh kosong !'
         ]);
 
-        if($this->form_validation->run()==false){
+        if ($this->form_validation->run() == false) {
             $data['kode'] = $this->kode();
             $data['title'] = "Dashboard Admin";
             $data['title_nav'] = "Dashboard Admin";
@@ -84,7 +84,7 @@ class Admin extends CI_Controller
             $this->load->view('templates/navbar', $data);
             $this->load->view('admin/index', $data);
             $this->load->view('templates/footer');
-        }else{
+        } else {
             $no_pemesanan = $this->input->post('no_pemesanan');
             $nm_customer = $this->input->post('nama_customer');
             $nm_kasir = $this->input->post('nama_kasir');
@@ -97,27 +97,26 @@ class Admin extends CI_Controller
             $subttl = $this->input->post('item_total');
             $id_pemesanan;
 
-        for ($i = 0; $i < count($berat); $i++) {
+            for ($i = 0; $i < count($berat); $i++) {
 
-            $data = array(
-                'no_pemesanan'      => $no_pemesanan,
-                'nama_customer'     => $nm_customer,
-                'nama_kasir'        => $nm_kasir,
-                'jenis_cucian'      => $jenis[$i],
-                'paket_cucian'      => $paket[$i],
-                'berat_cucian'      => $berat[$i],
-                'parfum_cucian'     => $parfum[$i],
-                'no_telp_customer'  => $no_telp_customer,
-                'status'            => $status,
-                'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $subttl),
-                'id_user'           => $this->session->userdata('id_entitas')
-            );
-            $query = $this->db->insert('data_pemesanan', $data);
-        }
-        if($query){
+                $data = array(
+                    'no_pemesanan'      => $no_pemesanan,
+                    'nama_customer'     => $nm_customer,
+                    'nama_kasir'        => $nm_kasir,
+                    'jenis_cucian'      => $jenis[$i],
+                    'paket_cucian'      => $paket[$i],
+                    'berat_cucian'      => $berat[$i],
+                    'parfum_cucian'     => $parfum[$i],
+                    'no_telp_customer'  => $no_telp_customer,
+                    'status'            => $status,
+                    'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $subttl),
+                    'id_user'           => $this->session->userdata('id_entitas')
+                );
+                $query = $this->db->insert('data_pemesanan', $data);
+            }
+            if ($query) {
                 $this->cetakpemesanan($no_pemesanan);
             }
-        
         }
     }
 
@@ -147,7 +146,7 @@ class Admin extends CI_Controller
             'status' => $this->input->post('status')
         );
         $this->db->where($where);
-        $this->db->update('data_pemesanan',$data);
+        $this->db->update('data_pemesanan', $data);
         //$this->crud_model->update($id,$value,$modul);
     }
     public function printpemesanan()
@@ -177,9 +176,9 @@ class Admin extends CI_Controller
         $this->db->where($where);
         $mahasiswa = $this->db->get('data_pemesanan')->result();
         $no = 1;
-        $grandttl=0;
+        $grandttl = 0;
         foreach ($mahasiswa as $row) {
-            $tanggal_pemesanan = date('d/m/yy',strtotime($row->tanggal_pemesanan));
+            $tanggal_pemesanan = date('d/m/yy', strtotime($row->tanggal_pemesanan));
             $pdf->SetMargins(10, 3, 4);
             $pdf->Cell(15, 6, "Nama", 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
@@ -195,7 +194,7 @@ class Admin extends CI_Controller
             $pdf->Cell(30, 6, "Paket Cucian", 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
             $pdf->Cell(30, 6, $row->paket_cucian, 0, 1);
-             $pdf->Cell(30, 6, "Jenis Cucian", 0, 0);
+            $pdf->Cell(30, 6, "Jenis Cucian", 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
             $pdf->Cell(30, 6, $row->jenis_cucian, 0, 1);
             $pdf->Cell(30, 6, "Jam Pesan", 0, 0);
@@ -221,39 +220,39 @@ class Admin extends CI_Controller
     }
     //==================================== Area untuk dashboard/index admin ====================================
 
-<<<<<<< Updated upstream
-    public function filtering(){
+    public function filtering()
+    {
         $data1 = $this->input->post('from_date');
         $data2 = $this->input->post('to_date');
-        $from = date('Y-m-d',strtotime($data1));
-        $to = date('Y-m-d',strtotime($data2));
-        $this->db->where('tanggal_pemesanan >=',$from);
-        $this->db->where('tanggal_pemesanan <=',$to);
+        $from = date('Y-m-d', strtotime($data1));
+        $to = date('Y-m-d', strtotime($data2));
+        $this->db->where('tanggal_pemesanan >=', $from);
+        $this->db->where('tanggal_pemesanan <=', $to);
         $data = $this->db->get('data_pemesanan')->result();
         echo json_encode($data);
     }
-    public function kode(){
-          date_default_timezone_set('Asia/Jakarta');
-          $tgl=date('d/m/');
-          $tahun=date('Y'); 
-          $this->db->like('no_pemesanan',$tgl);
-          $this->db->select('RIGHT(data_pemesanan.no_pemesanan,2) as no_pemesanan', FALSE);
-          $this->db->order_by('no_pemesanan','DESC');    
-          $this->db->limit(1);    
-          $query = $this->db->get('data_pemesanan');  //cek dulu apakah ada sudah ada kode di tabel.    
-          if($query->num_rows() <> 0){      
-               //cek kode jika telah tersedia    
-               $data = $query->row();      
-               $kode = intval($data->no_pemesanan) + 1; 
-          }
-          else{      
-               $kode = 1;  //cek jika kode belum terdapat pada table
-          }
-              $batas = str_pad($kode, 3, "0", STR_PAD_LEFT);    
-              $kodetampil = $tgl.'V'.$tahun.$batas;  //format kode
-              return $kodetampil;  
-         }
-=======
+    public function kode()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $tgl = date('d/m/', strtotime('-1 day', strtotime(date('d:m'))));
+        $tahun = date('Y');
+        $this->db->like('no_pemesanan', $tgl);
+        $this->db->select('RIGHT(data_pemesanan.no_pemesanan,2) as no_pemesanan', FALSE);
+        $this->db->order_by('no_pemesanan', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get('data_pemesanan');  //cek dulu apakah ada sudah ada kode di tabel.    
+        if ($query->num_rows() <> 0) {
+            //cek kode jika telah tersedia    
+            $data = $query->row();
+            $kode = intval($data->no_pemesanan) + 1;
+        } else {
+            $kode = 1;  //cek jika kode belum terdapat pada table
+        }
+        $batas = str_pad($kode, 3, "0", STR_PAD_LEFT);
+        $kodetampil = $tgl . 'V' . $tahun . $batas;  //format kode
+        return $kodetampil;
+    }
+
 
 
 
@@ -338,11 +337,6 @@ class Admin extends CI_Controller
     //==================================== Area untuk Stok Barang admin ====================================
 
 
-
-
-
-
->>>>>>> Stashed changes
 
     public function my_profile()
     {
