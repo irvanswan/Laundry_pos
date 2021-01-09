@@ -123,7 +123,7 @@
                     var json = data,
                         obj = JSON.parse(json);
                     $("#no_telp_customer").val(obj.no_telp_customer);
-                    $("#status").val(obj.status);
+                    //$("#status").val(obj.status);
                 },
             })
         });

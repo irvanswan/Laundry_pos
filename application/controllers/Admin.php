@@ -143,8 +143,7 @@ class Admin extends CI_Controller
         $bio = $this->data_pemesanan->getDataPemesanan($id_entitas, $nama_customer);
 
         $data = array(
-            'no_telp_customer' => $bio['no_telp_customer'],
-            'status' => $bio['status'],
+            'no_telp_customer' => $bio['no_telp_customer']
         );
 
         echo json_encode($data);
