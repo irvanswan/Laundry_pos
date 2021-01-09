@@ -140,9 +140,6 @@
 
         $(document).on("click", ".btn_edit", function() {
             const tr = $(this).parents('tr');
-            /*let paket_cucian = tr.find('span[name=paket_cucian]').html();
-            let jenis_cucian = tr.find('span[name=jenis_cucian]').html();
-            let parfum_cucian = tr.find('span[name=parfum_cucian]').html();*/
             tr.find("button[class~='btn_confirms']").show();
             tr.find("span[class~='caption']").hide();
             tr.find("button[class~='btn_edit']").hide();
@@ -159,13 +156,8 @@
             data.no_pemesanan = tr.find("input[name=no_pemesanan]").val();
             data.nama_customer = tr.find("input[name=nama_customer]").val();
             data.nama_kasir = tr.find("input[name=nama_kasir]").val();
-            data.jenis_cucian = tr.find("select[name=jenis_cucian]").val();
-            data.paket_cucian = tr.find("select[name=paket_cucian]").val();
-            data.berat_cucian = tr.find("input[name=berat_cucian]").val();
-            data.parfum_cucian = tr.find("select[name=parfum_cucian]").val();
             data.total_pemesanan = tr.find("input[name=total_pemesanan]").val();
             data.no_telp_customer = tr.find("input[name=no_telp_customer]").val();
-            data.status = tr.find("select[name=status]").val();
             $.ajax({
                 type: "post",
                 cache: "false",
@@ -178,13 +170,8 @@
                     tr.find("span[name=no_pemesanan]").fadeIn().text(data.no_pemesanan);
                     tr.find("span[name=nama_customer]").fadeIn().text(data.nama_customer);
                     tr.find("span[name=nama_kasir]").fadeIn().text(data.nama_kasir);
-                    tr.find("span[name = jenis_cucian]").fadeIn().text(data.jenis_cucian);
-                    tr.find("span[name = paket_cucian]").fadeIn().text(data.paket_cucian);
-                    tr.find("span[name = berat_cucian]").fadeIn().text(data.berat_cucian);
-                    tr.find("span[name = parfum_cucian]").fadeIn().text(data.parfum_cucian);
                     tr.find("span[name = total_pemesanan]").fadeIn().text(data.total_pemesanan);
                     tr.find("span[name = no_telp_customer]").fadeIn().text(data.no_telp_customer);
-                    tr.find("span[name = status]").fadeIn().text(data.status);
                 }
             })
         });
@@ -213,58 +200,19 @@
                         "</td>" +
                         "<td>" +
                         "<span class='caption' name='nama_customer' data-id=" + data[i].id_pemesanan + ">" + data[i].nama_customer + "</span>" +
-                        "<input type='text' name='nama_customer' value=" + data[i].nama_customer + " class='editor' data-id=" + data[i].id_pemesanan + " disabled>" +
+                        "<input type='text' name='nama_customer' value=" + data[i].nama_customer + " class='editor' data-id=" + data[i].id_pemesanan + ">" +
                         "</td>" +
                         "<td>" +
                         "<span class='caption' data-id=" + data[i].id_pemesanan + " name='nama_kasir'>" + data[i].nama_kasir + "</span>" +
                         "<input type='text' name='nama_kasir' value=" + data[i].nama_kasir + " class='editor' data-id=" + data[i].id_pemesanan + " disabled>" +
                         "</td>" +
                         "<td>" +
-                        "<span class='caption' data-id=" + data[i].id_pemesanan + " name='jenis_cucian'>" + data[i].jenis_cucian + "</span>" +
-                        "<select name='jenis_cucian' class='editor' id='jenis_cucian1'>" +
-                        "<option value=" + data[i].jenis_cucian + ">" + data[i].jenis_cucian + "</option>" +
-                        "<option value='1000'>Jenis A (1000)</option>" +
-                        "<option value='2000'>Jenis B (2000)</option>" +
-                        "</select>" +
-                        "</td>" +
-                        "<td>" +
-                        "<span class='caption' data-id=" + data[i].id_pemesanan + "  name='paket_cucian'>" + data[i].paket_cucian + "</span>" +
-                        "<select name='paket_cucian' class='editor' id='paket_cucian1'>" +
-                        "<option value=" + data[i].paket_cucian + ">" + data[i].paket_cucian + "</option>" +
-                        "<option value='1000'>Paket A (1000)</option>" +
-                        "<option value='2000'>Paket B (2000)</option>" +
-                        "</select>" +
-                        "</td>" +
-                        "<td>" +
-                        "<span class='caption' data-id=" + data[i].id_pemesanan + " name='berat_cucian'>" + data[i].berat_cucian + "</span>" +
-                        "<input type='number' name='berat_cucian' class='editor' value=" + data[i].berat_cucian + " data-id=" + data[i].id_pemesanan + " id='berat_cucian1' min=0>" +
-                        "</td>" +
-                        "<td>" +
-                        "<span class='caption' name='parfum_cucian' data-id=" + data[i].id_pemesanan + ">" + data[i].parfum_cucian + "</span>" +
-                        "<select name='parfum_cucian' class='editor' id='parfum_cucian1'>" +
-                        "<option value=" + data[i].berat_cucian + ">" + data[i].berat_cucian + "</option>" +
-                        "<option value='1000'>Parfum A</option>" +
-                        "<option value='2000'>Parfum B</option>" +
-                        "</select>" +
-                        "</td>" +
-                        "<td>" +
                         "<span class='caption' name='total_pemesanan' data-id=" + data[i].id_pemesanan + ">" + data[i].total_pemesanan + "</span>" +
-                        "<input type='text' name='total_pemesanan' class='editor' value=" + data[i].total_pemesanan + " data-id=" + data[i].id_pemesanan + ">" +
+                        "<input type='text' name='total_pemesanan' class='editor' value=" + data[i].total_pemesanan + " data-id=" + data[i].id_pemesanan + " disabled >" +
                         "</td>" +
                         "<td>" +
                         "<span class='caption' name='no_telp_customer' data-id=" + data[i].id_pemesanan + ">" + data[i].no_telp_customer + "</span>" +
                         "<input type='text' name='no_telp_customer' class='editor' data-id=" + data[i].id_pemesanan + " value=" + data[i].no_telp_customer + ">" +
-                        "</td>" +
-                        "<td>" +
-                        "<span class='caption' name='status' data-id=" + data[i].id_pemesanan + ">" + data[i].status + "</span>" +
-                        "<select name='status' class='editor'>" +
-                        "<option value=" + data[i].status + ">" + data[i].status + "</option>" +
-                        "<option value='tunggu'>Tunggu</option>" +
-                        "<option value='cuci'>Cuci - Siap Ambil</option>" +
-                        "<option value='dryer'>Dryer - Siap Ambil</option>" +
-                        "<option value='setrika'>Setrika - Siap Ambil</option>" +
-                        "<option value='selesai'>Selesai</option>" +
-                        "</select>" +
                         "</td>" +
                         "<td>" +
                         "<div class='row'>" +
@@ -302,6 +250,11 @@
                         "<i class='now-ui-icons ui-1_send'></i>" +
                         "</button>" +
                         "</form>" +
+                        "</td>" +
+                        "<td>" +
+                        "<button type='submit' class='btn btn-primary' title='Lihat' data-id="+data[i].id_pemesanan +">"+
+                        "<i class='now-ui-icons ui-1_zoom-bold'></i>" +
+                        "</button>" +
                         "</td>" +
                         "</tr>";
                 }

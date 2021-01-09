@@ -31,19 +31,76 @@ class Admin extends CI_Controller
     //==================================== Area untuk dashboard/index admin ====================================
     public function index()
     {
+         $this->form_validation->set_rules('nama_customer', 'Nama_customer', 'required|trim', [
+            'required' => 'Nama Customer tidak boleh kosong !'
+        ]);
+        $this->form_validation->set_rules('status', 'Status', 'required|trim', [
+            'required' => 'Status tidak boleh kosong !'
+        ]);
+        $this->form_validation->set_rules('berat[]', 'Berat', 'required|numeric|regex_match[/^[5-99]/]', [
+            'required' => 'Berat tidak boleh kosong !',
+            'regex_match' => 'Pesanan tidak boleh lebih rendah dari 5 Kg',
+        ]);
+        /*($this->form_validation->set_rules('bayar', 'Bayar', 'required', [
+            'required' => 'Bayar tidak boleh kosong !'
+        ]);*/
+        $this->form_validation->set_rules('no_telp_customer', 'No_telp_Customer', 'required|trim|numeric|max_length[14]', [
+            'required' => 'No Telp tidak boleh kosong !',
+            'numeric' => 'Kolom harus berisi angka !',
+            'max_length' => 'Kolom harus berisi maximal 14 karakter !',
+        ]);
 
-        $data['title'] = "Dashboard Admin";
-        $data['title_nav'] = "Dashboard Admin";
-        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        if ($this->form_validation->run() == false) {
+            $data['title'] = "Dashboard Admin";
+            $data['title_nav'] = "Dashboard Admin";
+            $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-        $this->db->order_by('nama_customer', 'ASC');
-        $data['data_pemesanan'] = $this->db->get_where('data_pemesanan', ['id_user' => $this->session->userdata('id_entitas')])->result_array();
-        $data['kode'] = $this->kode();
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/navbar', $data);
-        $this->load->view('admin/index', $data);
-        $this->load->view('templates/footer');
+            $this->db->order_by('nama_customer', 'ASC');
+            $data['data_pemesanan'] = $this->db->get_where('data_pemesanan', ['id_user' => $this->session->userdata('id_entitas')])->result_array();
+            $data['kode'] = $this->kodePemesananAcak();
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/navbar', $data);
+            $this->load->view('admin/index', $data);
+            $this->load->view('templates/footer');
+        }else{
+            $data_pemesanan = array(
+                'no_pemesanan'      => $this->input->post('no_pemesanan'),
+                'nama_customer'     => $this->input->post('nama_customer'),
+                'nama_kasir'        => $this->input->post('nama_kasir'),
+                'no_telp_customer'  => '0'.$this->input->post('no_telp_customer'),
+                'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $this->input->post('harga_total')),
+                'id_user'           => $this->session->userdata('id_entitas')
+            );
+            $query1 = $this->db->insert('data_pemesanan',$data_pemesanan);
+            $id_pemesanan = $this->db->insert_id();
+            if($query1){
+                $status = $this->input->post('status');
+                $berat  = $this->input->post('berat');
+                $paket  = $this->input->post('paket');
+                $jenis  = $this->input->post('jenis');
+                $parfum = $this->input->post('parfum');
+                $subttl = $this->input->post('item_total');
+
+                for ($i = 0; $i < count($berat); $i++) {
+
+                    $data = array(
+                        'id_pemesanan'      => $id_pemesanan,
+                        'jenis_cucian'      => $jenis[$i],
+                        'paket_cucian'      => $paket[$i],
+                        'berat_cucian'      => $berat[$i],
+                        'parfum_cucian'     => $parfum[$i],
+                        'sub_ttl'           => preg_replace('/,.*|[^0-9]/', '', $subttl[$i]),
+                        'status'            => $status
+                    );
+                    $query = $this->db->insert('detail_pemesanan', $data);
+                }
+                if($query){
+                   return $this->cetakpemesanan($data_pemesanan['no_pemesanan']);
+                }
+            }
+        
+        }
     }
     // autofil data pemesanan
     public function data_pemesanan()
@@ -60,78 +117,7 @@ class Admin extends CI_Controller
 
         echo json_encode($data);
     }
-
-    public function coba()
-    {
-        $this->form_validation->set_rules('nama_customer', 'Nama_customer', 'required|trim', [
-            'required' => 'Nama Customer tidak boleh kosong !'
-        ]);
-        $this->form_validation->set_rules('status', 'Status', 'required|trim', [
-            'required' => 'Status tidak boleh kosong !'
-        ]);
-        $this->form_validation->set_rules('berat[]', 'Berat', 'required|numeric|regex_match[/^[5-99]/]', [
-            'required' => 'Berat tidak boleh kosong !',
-            'regex_match' => 'Pesanan tidak boleh lebih rendah dari 5 Kg',
-        ]);
-        $this->form_validation->set_rules('bayar', 'Bayar', 'required|trim', [
-            'required' => 'Bayar tidak boleh kosong !'
-        ]);
-        $this->form_validation->set_rules('no_telp_customer', 'No_telp_Customer', 'required|trim|numeric|max_length[14]', [
-            'required' => 'No Telp tidak boleh kosong !',
-            'numeric' => 'Kolom harus berisi angka !',
-            'max_length' => 'Kolom harus berisi maximal 14 karakter !',
-        ]);
-
-        if ($this->form_validation->run() == false) {
-            $data['kode'] = $this->kode();
-            $data['title'] = "Dashboard Admin";
-            $data['title_nav'] = "Dashboard Admin";
-            $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-
-            $this->db->order_by('nama_customer', 'ASC');
-            $data['data_pemesanan'] = $this->db->get_where('data_pemesanan', ['id_user' => $this->session->userdata('id_entitas')])->result_array();
-
-            $this->load->view('templates/header', $data);
-            $this->load->view('templates/sidebar', $data);
-            $this->load->view('templates/navbar', $data);
-            $this->load->view('admin/index', $data);
-            $this->load->view('templates/footer');
-        } else {
-            $no_pemesanan = $this->input->post('no_pemesanan');
-            $nm_customer = $this->input->post('nama_customer');
-            $nm_kasir = $this->input->post('nama_kasir');
-            $no_telp_customer = $this->input->post('no_telp_customer');
-            $status = $this->input->post('status');
-            $berat  = $this->input->post('berat');
-            $paket  = $this->input->post('paket');
-            $jenis  = $this->input->post('jenis');
-            $parfum = $this->input->post('parfum');
-            $subttl = $this->input->post('item_total');
-            $id_pemesanan;
-
-            for ($i = 0; $i < count($berat); $i++) {
-
-                $data = array(
-                    'no_pemesanan'      => $no_pemesanan,
-                    'nama_customer'     => $nm_customer,
-                    'nama_kasir'        => $nm_kasir,
-                    'jenis_cucian'      => $jenis[$i],
-                    'paket_cucian'      => $paket[$i],
-                    'berat_cucian'      => $berat[$i],
-                    'parfum_cucian'     => $parfum[$i],
-                    'no_telp_customer'  => $no_telp_customer,
-                    'status'            => $status,
-                    'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $subttl),
-                    'id_user'           => $this->session->userdata('id_entitas')
-                );
-                $query = $this->db->insert('data_pemesanan', $data);
-            }
-            if ($query) {
-                $this->cetakpemesanan($no_pemesanan);
-            }
-        }
-    }
-
+    // menghapus data pemesanan
     public function hapuspemesanan()
     {
         $data = array(
@@ -141,7 +127,7 @@ class Admin extends CI_Controller
         $this->db->delete('data_pemesanan');
         redirect('admin');
     }
-
+    // edit data pemesanan
     public function editpemesanan()
     {
         $where = array(
@@ -149,24 +135,20 @@ class Admin extends CI_Controller
         );
 
         $data = array(
-            'jenis_cucian' => $this->input->post('jenis_cucian'),
-            'paket_cucian' => $this->input->post('paket_cucian'),
-            'berat_cucian' => $this->input->post('berat_cucian'),
-            'parfum_cucian' => $this->input->post('parfum_cucian'),
-            'total_pemesanan' => $this->input->post('total_pemesanan'),
-            'no_telp_customer' => $this->input->post('no_telp_customer'),
-            'status' => $this->input->post('status')
+            'nama_customer' => $this->input->post('nama_customer'),
+            'no_telp_customer' => $this->input->post('no_telp_customer')
         );
         $this->db->where($where);
         $this->db->update('data_pemesanan', $data);
         //$this->crud_model->update($id,$value,$modul);
     }
+    // tombol cetak pemesanan
     public function printpemesanan()
     {
         $no_pemesanan = $this->input->post('no_pemesanan');
         $this->cetakpemesanan($no_pemesanan);
     }
-
+    //fungsi cetak pemesanan fpdf
     function cetakpemesanan($id_pemesanan)
     {
 
@@ -178,13 +160,16 @@ class Admin extends CI_Controller
         $pdf->AddPage();
         // setting jenis font yang akan digunakan
         $pdf->SetFont('Arial', 'B', 16);
-        // mencetak string 
-        $pdf->Cell(190, 7, 'LAUNDRY-KUY', 0, 1, 'C');
+        // mencetak string
+        $laundry = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row();
+        $pdf->Cell(190, 7, $laundry->name_laundry, 0, 1, 'C');
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(190, 7, 'Semoga harimu menyenangkan :) ', 0, 1, 'C');
         // Memberikan space kebawah agar tidak terlalu rapat
         $pdf->Cell(10, 7, '', 0, 1);
         $pdf->SetFont('Arial', '', 10);
+
+        $this->db->join('detail_pemesanan', 'data_pemesanan.id_pemesanan = detail_pemesanan.id_pemesanan');
         $this->db->where($where);
         $mahasiswa = $this->db->get('data_pemesanan')->result();
         $no = 1;
@@ -217,12 +202,12 @@ class Admin extends CI_Controller
             $pdf->Cell(30, 6, $tanggal_pemesanan, 0, 1);
             $pdf->Cell(30, 6, "Total Pemesanan", 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
-            $pdf->Cell(30, 6, $row->total_pemesanan, 0, 1);
+            $pdf->Cell(30, 6, $row->sub_ttl, 0, 1);
             $pdf->Cell(30, 6, "status", 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
             $pdf->Cell(30, 6, $row->status, 0, 1);
             $pdf->Cell(25, 6, " ", 0, 1);
-            $grandttl += $row->total_pemesanan;
+            $grandttl = $row->total_pemesanan;
         }
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(30, 6, "Harga Total", 0, 0);
@@ -231,7 +216,7 @@ class Admin extends CI_Controller
         $pdf->Output();
     }
     //==================================== Area untuk dashboard/index admin ====================================
-
+    // fungsi filtering dari jangka tanggal yang ditentukan
     public function filtering()
     {
         $data1 = $this->input->post('from_date');
@@ -243,27 +228,27 @@ class Admin extends CI_Controller
         $data = $this->db->get('data_pemesanan')->result();
         echo json_encode($data);
     }
-    public function kode()
-    {
+    // fungsi membuat kode pemesanan sesuai tanggal
+    public function kodePemesananAcak(){
         date_default_timezone_set('Asia/Jakarta');
-        //ini biar dilaptopku ngepas antara jam laptop dan jam di web
-        $tgl = date('d/m/', strtotime('-1 day', strtotime(date('d:m'))));
-        $tahun = date('Y');
-        $this->db->like('no_pemesanan', $tgl);
+        $tgl=date('d/m/');
+        $tahun=date('Y'); 
+        $this->db->like('no_pemesanan',$tgl);
         $this->db->select('RIGHT(data_pemesanan.no_pemesanan,2) as no_pemesanan', FALSE);
-        $this->db->order_by('no_pemesanan', 'DESC');
-        $this->db->limit(1);
+        $this->db->order_by('no_pemesanan','DESC');    
+        $this->db->limit(1);    
         $query = $this->db->get('data_pemesanan');  //cek dulu apakah ada sudah ada kode di tabel.    
-        if ($query->num_rows() <> 0) {
+        if($query->num_rows() <> 0){      
             //cek kode jika telah tersedia    
-            $data = $query->row();
-            $kode = intval($data->no_pemesanan) + 1;
-        } else {
+            $data = $query->row();      
+            $kode = intval($data->no_pemesanan) + 1; 
+        }
+        else{      
             $kode = 1;  //cek jika kode belum terdapat pada table
         }
-        $batas = str_pad($kode, 3, "0", STR_PAD_LEFT);
-        $kodetampil = $tgl . 'V' . $tahun . $batas;  //format kode
-        return $kodetampil;
+        $batas = str_pad($kode, 3, "0", STR_PAD_LEFT);    
+        $kodetampil = $tgl.'V'.$tahun.$batas;  //format kode
+        return $kodetampil;  
     }
 
 
