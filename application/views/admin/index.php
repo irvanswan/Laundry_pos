@@ -224,21 +224,21 @@
                                     </td>
                                     <td>
                                         <div class="row">
-                                            <div class="col-sm-6 mb-1">
-                                                <form action="<?= base_url('admin/hapuspemesanan'); ?>" class="text-center" method="POST">
-                                                    <input type="hidden" name="id_pemesanan" value="<?php echo $dt['id_pemesanan']; ?>">
-                                                    <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Inactive" onclick="return confirm('Apakah anda yakin menghapus data ini ?');">
-                                                        <i class="now-ui-icons ui-1_simple-remove"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                            <div class="col-sm-6 mr-1">
+                                            <div class="col-sm-6">
                                                 <button type="submit" class="btn btn-warning btn_edit" title="Edit">
                                                     <i class="now-ui-icons ui-2_settings-90"></i>
                                                 </button>
                                                 <button type="submit" data-id="<?php echo $dt['id_pemesanan'] ?>" class="btn btn-primary btn_confirms" id="btn_confirm" title="Edit">
                                                     <i class="now-ui-icons ui-1_check"></i>
                                                 </button>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <form action="<?= base_url('admin/hapuspemesanan'); ?>" class="text-center" method="POST">
+                                                    <input type="hidden" name="id_pemesanan" value="<?php echo $dt['id_pemesanan']; ?>">
+                                                    <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Inactive" onclick="return confirm('Apakah anda yakin menghapus data ini ?');">
+                                                        <i class="now-ui-icons ui-1_simple-remove"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </td>
