@@ -68,7 +68,7 @@ class Admin extends CI_Controller
                 'no_pemesanan'      => $this->input->post('no_pemesanan'),
                 'nama_customer'     => $this->input->post('nama_customer'),
                 'nama_kasir'        => $this->input->post('nama_kasir'),
-                'no_telp_customer'  => '0' . $this->input->post('no_telp_customer'),
+                'no_telp_customer'  => '62' . $this->input->post('no_telp_customer'),
                 'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $this->input->post('harga_total')),
                 'id_user'           => $this->session->userdata('id_entitas')
             );
@@ -98,7 +98,7 @@ class Admin extends CI_Controller
                 if ($query) {
                     return $this->cetakpemesanan($data_pemesanan['no_pemesanan']);
                 }
-            } 
+            }
         }
     }
     // autofil data pemesanan
