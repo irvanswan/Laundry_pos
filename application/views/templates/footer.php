@@ -123,7 +123,7 @@
                     var json = data,
                         obj = JSON.parse(json);
                     $("#no_telp_customer").val(obj.no_telp_customer);
-                    //$("#status").val(obj.status);
+                    $("#status").val(obj.status);
                 },
             })
         });
@@ -176,7 +176,7 @@
             })
         });
     });
-    let one_click = (status, tombol)=>{
+    let one_click = (status, tombol) => {
         tombol.disabled = status;
         return true;
     }
@@ -256,7 +256,7 @@
                         "</form>" +
                         "</td>" +
                         "<td>" +
-                        "<button type='submit' class='btn btn-primary' title='Lihat' data-id="+data[i].id_pemesanan +">"+
+                        "<button type='submit' class='btn btn-primary' title='Lihat' data-id=" + data[i].id_pemesanan + ">" +
                         "<i class='now-ui-icons ui-1_zoom-bold'></i>" +
                         "</button>" +
                         "</td>" +

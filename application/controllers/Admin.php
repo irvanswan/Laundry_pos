@@ -41,9 +41,9 @@ class Admin extends CI_Controller
             'required' => 'Berat tidak boleh kosong !',
             'regex_match' => 'Pesanan tidak boleh lebih rendah dari 5 Kg',
         ]);
-        /*($this->form_validation->set_rules('bayar', 'Bayar', 'required', [
+        $this->form_validation->set_rules('bayar', 'Bayar', 'required', [
             'required' => 'Bayar tidak boleh kosong !'
-        ]);*/
+        ]);
         $this->form_validation->set_rules('no_telp_customer', 'No_telp_Customer', 'required|trim|numeric|max_length[14]', [
             'required' => 'No Telp tidak boleh kosong !',
             'numeric' => 'Kolom harus berisi angka !',
@@ -75,7 +75,6 @@ class Admin extends CI_Controller
             $query1 = $this->db->insert('data_pemesanan', $data_pemesanan);
             $id_pemesanan = $this->db->insert_id();
             if ($query1) {
-                $status = $this->input->post('status');
                 $berat  = $this->input->post('berat');
                 $paket  = $this->input->post('paket');
                 $jenis  = $this->input->post('jenis');
@@ -91,7 +90,6 @@ class Admin extends CI_Controller
                         'berat_cucian'      => $berat[$i],
                         'parfum_cucian'     => $parfum[$i],
                         'sub_ttl'           => preg_replace('/,.*|[^0-9]/', '', $subttl[$i]),
-                        'status'            => $status
                     );
                     $query = $this->db->insert('detail_pemesanan', $data);
                 }
@@ -110,7 +108,8 @@ class Admin extends CI_Controller
         $bio = $this->data_pemesanan->getDataPemesanan($id_entitas, $nama_customer);
 
         $data = array(
-            'no_telp_customer' => $bio['no_telp_customer']
+            'no_telp_customer' => $bio['no_telp_customer'],
+            'status' => $bio['status']
         );
 
         echo json_encode($data);
