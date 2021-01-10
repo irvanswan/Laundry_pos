@@ -31,7 +31,7 @@ class Admin extends CI_Controller
     //==================================== Area untuk dashboard/index admin ====================================
     public function index()
     {
-         $this->form_validation->set_rules('nama_customer', 'Nama_customer', 'required|trim', [
+        $this->form_validation->set_rules('nama_customer', 'Nama_customer', 'required|trim', [
             'required' => 'Nama Customer tidak boleh kosong !'
         ]);
         $this->form_validation->set_rules('status', 'Status', 'required|trim', [
@@ -63,18 +63,18 @@ class Admin extends CI_Controller
             $this->load->view('templates/navbar', $data);
             $this->load->view('admin/index', $data);
             $this->load->view('templates/footer');
-        }else{
+        } else {
             $data_pemesanan = array(
                 'no_pemesanan'      => $this->input->post('no_pemesanan'),
                 'nama_customer'     => $this->input->post('nama_customer'),
                 'nama_kasir'        => $this->input->post('nama_kasir'),
-                'no_telp_customer'  => '0'.$this->input->post('no_telp_customer'),
+                'no_telp_customer'  => '0' . $this->input->post('no_telp_customer'),
                 'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $this->input->post('harga_total')),
                 'id_user'           => $this->session->userdata('id_entitas')
             );
-            $query1 = $this->db->insert('data_pemesanan',$data_pemesanan);
+            $query1 = $this->db->insert('data_pemesanan', $data_pemesanan);
             $id_pemesanan = $this->db->insert_id();
-            if($query1){
+            if ($query1) {
                 $status = $this->input->post('status');
                 $berat  = $this->input->post('berat');
                 $paket  = $this->input->post('paket');
@@ -95,11 +95,43 @@ class Admin extends CI_Controller
                     );
                     $query = $this->db->insert('detail_pemesanan', $data);
                 }
-                if($query){
-                   return $this->cetakpemesanan($data_pemesanan['no_pemesanan']);
+                if ($query) {
+                    return $this->cetakpemesanan($data_pemesanan['no_pemesanan']);
+                }
+            } else {
+                $no_pemesanan = $this->input->post('no_pemesanan');
+                $nm_customer = $this->input->post('nama_customer');
+                $nm_kasir = $this->input->post('nama_kasir');
+                $no_telp_customer = $this->input->post('no_telp_customer');
+                $status = $this->input->post('status');
+                $berat  = $this->input->post('berat');
+                $paket  = $this->input->post('paket');
+                $jenis  = $this->input->post('jenis');
+                $parfum = $this->input->post('parfum');
+                $subttl = $this->input->post('item_total');
+                // $id_pemesanan;
+
+                for ($i = 0; $i < count($berat); $i++) {
+
+                    $data = array(
+                        'no_pemesanan'      => $no_pemesanan,
+                        'nama_customer'     => $nm_customer,
+                        'nama_kasir'        => $nm_kasir,
+                        'jenis_cucian'      => $jenis[$i],
+                        'paket_cucian'      => $paket[$i],
+                        'berat_cucian'      => $berat[$i],
+                        'parfum_cucian'     => $parfum[$i],
+                        'no_telp_customer'  => $no_telp_customer,
+                        'status'            => $status,
+                        'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $subttl[$i]),
+                        'id_user'           => $this->session->userdata('id_entitas')
+                    );
+                    $query = $this->db->insert('data_pemesanan', $data);
+                }
+                if ($query) {
+                    $this->cetakpemesanan($no_pemesanan);
                 }
             }
-        
         }
     }
     // autofil data pemesanan
@@ -136,7 +168,14 @@ class Admin extends CI_Controller
 
         $data = array(
             'nama_customer' => $this->input->post('nama_customer'),
-            'no_telp_customer' => $this->input->post('no_telp_customer')
+            'no_telp_customer' => $this->input->post('no_telp_customer'),
+            'jenis_cucian' => $this->input->post('jenis_cucian'),
+            'paket_cucian' => $this->input->post('paket_cucian'),
+            'berat_cucian' => $this->input->post('berat_cucian'),
+            'parfum_cucian' => $this->input->post('parfum_cucian'),
+            'total_pemesanan' => preg_replace('/,.*|[^0-9]/', '', $this->input->post('total_pemesanan')),
+            'no_telp_customer' => $this->input->post('no_telp_customer'),
+            'status' => $this->input->post('status'),
         );
         $this->db->where($where);
         $this->db->update('data_pemesanan', $data);
@@ -229,26 +268,48 @@ class Admin extends CI_Controller
         echo json_encode($data);
     }
     // fungsi membuat kode pemesanan sesuai tanggal
-    public function kodePemesananAcak(){
+    public function kodePemesananAcak()
+    {
         date_default_timezone_set('Asia/Jakarta');
-        $tgl=date('d/m/');
-        $tahun=date('Y'); 
-        $this->db->like('no_pemesanan',$tgl);
+        $tgl = date('d/m/');
+        $tahun = date('Y');
+        $this->db->like('no_pemesanan', $tgl);
         $this->db->select('RIGHT(data_pemesanan.no_pemesanan,2) as no_pemesanan', FALSE);
-        $this->db->order_by('no_pemesanan','DESC');    
-        $this->db->limit(1);    
+        $this->db->order_by('no_pemesanan', 'DESC');
+        $this->db->limit(1);
         $query = $this->db->get('data_pemesanan');  //cek dulu apakah ada sudah ada kode di tabel.    
-        if($query->num_rows() <> 0){      
+        if ($query->num_rows() <> 0) {
             //cek kode jika telah tersedia    
-            $data = $query->row();      
-            $kode = intval($data->no_pemesanan) + 1; 
-        }
-        else{      
+            $data = $query->row();
+            $kode = intval($data->no_pemesanan) + 1;
+        } else {
             $kode = 1;  //cek jika kode belum terdapat pada table
         }
-        $batas = str_pad($kode, 3, "0", STR_PAD_LEFT);    
-        $kodetampil = $tgl.'V'.$tahun.$batas;  //format kode
-        return $kodetampil;  
+        $batas = str_pad($kode, 3, "0", STR_PAD_LEFT);
+        $kodetampil = $tgl . 'V' . $tahun . $batas;  //format kode
+        return $kodetampil;
+    }
+    public function kode_barang()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        //ini biar dilaptopku ngepas antara jam laptop dan jam di web
+        $tgl = date('d/m/', strtotime('-1 day', strtotime(date('d:m'))));
+        $tahun = date('Y');
+        $this->db->like('kode_barang', $tgl);
+        $this->db->select('RIGHT(stok_barang.kode_barang,2) as kode_barang', FALSE);
+        $this->db->order_by('kode_barang', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get('stok_barang');  //cek dulu apakah ada sudah ada kode di tabel.    
+        if ($query->num_rows() <> 0) {
+            //cek kode jika telah tersedia    
+            $data = $query->row();
+            $kode = intval($data->kode_barang) + 1;
+        } else {
+            $kode = 1;  //cek jika kode belum terdapat pada table
+        }
+        $batas = str_pad($kode, 3, "0", STR_PAD_LEFT);
+        $kodetampil = $tgl . 'B' . $tahun . $batas;  //format kode
+        return $kodetampil;
     }
 
 
@@ -331,13 +392,15 @@ class Admin extends CI_Controller
         $data['paket'] = $this->stok_barang->getPaketCuci($id_entitas);
         $data['bahan'] = $this->stok_barang->getBahanCuci($id_entitas);
 
-        $this->form_validation->set_rules('kode_barang', 'Kode Barang', 'required|trim', [
+        $data['kode_barang'] = $this->kode_barang();
+
+        $this->form_validation->set_rules('kode_barang[]', 'Kode Barang', 'required|trim', [
             'required' => 'Kode Barang tidak boleh kosong !'
         ]);
-        $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'required|trim', [
+        $this->form_validation->set_rules('nama_barang[]', 'Nama Barang', 'required|trim', [
             'required' => 'Nama Barang tidak boleh kosong !'
         ]);
-        $this->form_validation->set_rules('tanggal_barang', 'Tanggal Barang', 'required|trim', [
+        $this->form_validation->set_rules('tanggal_barang[]', 'Tanggal Barang', 'required|trim', [
             'required' => 'Tanggal Barang tidak boleh kosong !'
         ]);
         $this->form_validation->set_rules('harga_satuan[]', 'Harga Satuan', 'required|regex_match[/^[0-999999]/]', [
@@ -354,12 +417,6 @@ class Admin extends CI_Controller
             'numeric' => 'Isian harus berformat angka !',
             'regex_match' => 'Isian tidak boleh lebih rendah dari 0 !'
         ]);
-        $this->form_validation->set_rules('tersedia[]', 'Tersedia', 'required|trim', [
-            'required' => 'Tersedia tidak boleh kosong !',
-        ]);
-        $this->form_validation->set_rules('total_harga_barang', 'Total Harga', 'required|trim', [
-            'required' => 'Total Harga tidak boleh kosong !',
-        ]);
 
         if ($this->form_validation->run() == false) {
             $this->load->view('templates/header', $data);
@@ -368,19 +425,31 @@ class Admin extends CI_Controller
             $this->load->view('admin/stok_barang', $data);
             $this->load->view('templates/footer');
         } else {
-            $data = [
-                'kode_barang' => $this->input->post('kode_barang'),
-                'nama_barang' => $this->input->post('nama_barang'),
-                'harga_satuan' => $this->input->post('harga_satuan'),
-                'jumlah_barang' => $this->input->post('jumlah_barang'),
-                'total_harga_barang' => $this->input->post('total_harga_barang'),
-                'digunakan' => $this->input->post('digunakan'),
-                'tersedia' => $this->input->post('tersedia'),
-                'tanggal_barang' => $this->input->post('tanggal_barang'),
-                'active' => 1,
-                'id_user' => $this->session->userdata('id_entitas'),
-            ];
-            $stok = $this->stok_barang->insertStokBarang($data);
+            $kode_barang = $this->input->post('kode_barang');
+            $nama_barang = $this->input->post('nama_barang');
+            $harga_satuan = $this->input->post('harga_satuan');
+            $jumlah_barang = $this->input->post('jumlah_barang');
+            $total_harga_barang = $this->input->post('total_harga_barang');
+            $digunakan = $this->input->post('digunakan');
+            $tersedia = $this->input->post('tersedia');
+            $tanggal_barang = $this->input->post('tanggal_barang');
+
+            for ($i = 0; $i < count($kode_barang); $i++) {
+                $data = array(
+                    'kode_barang' => $kode_barang[$i],
+                    'nama_barang' => $nama_barang[$i],
+                    'harga_satuan' => preg_replace('/,.*|[^0-9]/', '', $harga_satuan[$i]),
+                    'jumlah_barang' => $jumlah_barang[$i],
+                    'total_harga_barang' => preg_replace('/,.*|[^0-9]/', '', $total_harga_barang[$i]),
+                    'digunakan' => $digunakan[$i],
+                    'tersedia' => preg_replace('/,.*|[^0-9]/', '', $tersedia[$i]),
+                    'tanggal_barang' => $tanggal_barang[$i],
+                    'active' => 1,
+                    'id_user' => $this->session->userdata('id_entitas'),
+                );
+                // var_dump($data);
+                $stok = $this->stok_barang->insertStokBarang($data);
+            }
             if ($stok == true) {
                 $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Stok Barang Sukses disimpan !
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
