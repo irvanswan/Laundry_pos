@@ -11,6 +11,7 @@ class Admin extends CI_Controller
         $this->load->model('admin/Absensi_pegawai_model', 'data_absen');
         $this->load->model('admin/Stok_barang_model', 'stok_barang');
         is_logged_in();
+        date_default_timezone_set('Asia/Jakarta');
     }
 
     //==================================== Area untuk buku petunjuk admin ====================================
@@ -70,12 +71,15 @@ class Admin extends CI_Controller
                 'nama_kasir'        => $this->input->post('nama_kasir'),
                 'no_telp_customer'  => '0' . $this->input->post('no_telp_customer'),
                 'total_pemesanan'   => preg_replace('/,.*|[^0-9]/', '', $this->input->post('harga_total')),
-                'id_user'           => $this->session->userdata('id_entitas')
+                'id_user'           => $this->session->userdata('id_entitas'),
+                'status'            => $this->input->post('status'),
+                'tanggal_pemesanan' => date('Y-m-d'),
+                'waktu_pemesanan'   => date('h:i:sa')
             );
+
             $query1 = $this->db->insert('data_pemesanan', $data_pemesanan);
             $id_pemesanan = $this->db->insert_id();
             if ($query1) {
-                $status = $this->input->post('status');
                 $berat  = $this->input->post('berat');
                 $paket  = $this->input->post('paket');
                 $jenis  = $this->input->post('jenis');
@@ -90,8 +94,7 @@ class Admin extends CI_Controller
                         'paket_cucian'      => $paket[$i],
                         'berat_cucian'      => $berat[$i],
                         'parfum_cucian'     => $parfum[$i],
-                        'sub_ttl'           => preg_replace('/,.*|[^0-9]/', '', $subttl[$i]),
-                        'status'            => $status
+                        'sub_ttl'           => preg_replace('/,.*|[^0-9]/', '', $subttl[$i])
                     );
                     $query = $this->db->insert('detail_pemesanan', $data);
                 }
@@ -100,6 +103,18 @@ class Admin extends CI_Controller
                 }
             } 
         }
+    }
+
+    public function detail_pemesanan()
+    {
+        $where = array(
+            'detail_pemesanan.id_pemesanan' => $this->input->post('id')
+        );
+
+        $this->db->join('detail_pemesanan', 'data_pemesanan.id_pemesanan = detail_pemesanan.id_pemesanan');
+        $this->db->where($where);
+        $data = $this->db->get('data_pemesanan')->result();
+        echo json_encode($data);
     }
     // autofil data pemesanan
     public function data_pemesanan()
@@ -115,6 +130,16 @@ class Admin extends CI_Controller
 
         echo json_encode($data);
     }
+    // menghapus data detail pemesanan
+    public function hapusdetail(){
+        $data = array(
+            'id_pemesanan' => $this->input->post('id_pemesanan'),
+            'id_detail'  => $this->input->post('id_detail')
+        );
+        $this->db->where($data);
+        $this->db->delete('detail_pemesanan');
+        redirect('admin');
+    }
     // menghapus data pemesanan
     public function hapuspemesanan()
     {
@@ -125,6 +150,23 @@ class Admin extends CI_Controller
         $this->db->delete('data_pemesanan');
         redirect('admin');
     }
+    // edit detail_pemesanan
+    public function editdetail()
+    {
+         $where = array(
+            'id_pemesanan' => $this->input->post("id")
+        );
+
+        $data = array(
+            'jenis_cucian' => $this->input->post('jenis_cucian'),
+            'paket_cucian' => $this->input->post('paket_cucian'),
+            'parfum_cucian' => $this->input->post('parfum_cucian'),
+            'berat_cucian' => $this->input->post('berat_cucian'),
+            'sub_ttl' => $this->input->post('sub_ttl')
+        );
+        $this->db->where($where);
+        $this->db->update('detail_pemesanan', $data);
+    }
     // edit data pemesanan
     public function editpemesanan()
     {
@@ -134,7 +176,8 @@ class Admin extends CI_Controller
 
         $data = array(
             'nama_customer' => $this->input->post('nama_customer'),
-            'no_telp_customer' => $this->input->post('no_telp_customer')
+            'no_telp_customer' => $this->input->post('no_telp_customer'),
+            'status' => $this->input->post('status')
         );
         $this->db->where($where);
         $this->db->update('data_pemesanan', $data);
@@ -166,44 +209,63 @@ class Admin extends CI_Controller
         // Memberikan space kebawah agar tidak terlalu rapat
         $pdf->Cell(10, 7, '', 0, 1);
         $pdf->SetFont('Arial', '', 10);
+  
+        $this->db->where($where);
+        $dt_pemesanan = $this->db->get('data_pemesanan')->row();
+        $tanggal = date('d F Y',strtotime($dt_pemesanan->tanggal_pemesanan));
+        $jam = date('h:i:s',strtotime($dt_pemesanan->waktu_pemesanan));
+        $pdf->i25(30,7,$dt_pemesanan->id_pemesanan);
+        $pdf->Cell(30, 7, 'No. Pemesanan', 0, 0);
+        $pdf->Cell(10, 7, ': '.$dt_pemesanan->no_pemesanan, 0, 1);
+        $pdf->Cell(30, 7, 'Kasir', 0, 0);
+        $pdf->Cell(10, 7, ': '.$dt_pemesanan->nama_kasir, 0, 1);
+        $pdf->Cell(30, 7, 'Tanggal', 0, 0);
+        $pdf->Cell(10, 7, ': '.$tanggal, 0, 1);
+        $pdf->Cell(30, 7, 'Jam', 0, 0);
+        $pdf->Cell(10, 7, ': '.$jam, 0, 1);
+        $pdf->Cell(30, 7, 'Customer', 0, 0);
+        $pdf->Cell(10, 7, ': '.$dt_pemesanan->nama_customer, 0, 1);
+        $pdf->SetLineWidth(0.2);
+        $pdf->Line(10,65,140,65);
 
         $this->db->join('detail_pemesanan', 'data_pemesanan.id_pemesanan = detail_pemesanan.id_pemesanan');
         $this->db->where($where);
-        $mahasiswa = $this->db->get('data_pemesanan')->result();
+        $join = $this->db->get('data_pemesanan')->result();
         $no = 1;
         $grandttl = 0;
-        foreach ($mahasiswa as $row) {
+        foreach ($join as $row) {
+            $parfum = $row->parfum_cucian == 1000 ? 'Parfum A' : 'Parfum B' ;
+            $jenis  = $row->jenis_cucian == 1000 ? 'Jenis A' : 'Jenis B';
+            $paket  = $row->paket_cucian == 1000 ? 'Paket A' : 'Paket B';
+            $status = $row->status == 0 ? 'Tunggu'                        
+                        : ($row->status == 1 ? 'Cuci - Siap Ambil'
+                        : ($row->status == 2 ? 'Dryer - Siap Ambil'
+                        : ($row->status == 3 ? 'Setrika - Siap Ambil'
+                        : 'Selesai')));
+
             $tanggal_pemesanan = date('d/m/yy', strtotime($row->tanggal_pemesanan));
             $pdf->SetMargins(10, 3, 4);
-            $pdf->Cell(15, 6, "Nama", 0, 0);
-            $pdf->Cell(6, 6, " : ", 0, 0);
-            $pdf->Cell(25, 6, $row->nama_customer, 0, 1);
-            $pdf->Cell(25, 6, " ", 0, 1);
+            $pdf->SetFont('Arial', 'B', 12);
             $pdf->Cell(30, 6, "Pemesanan " . $no++, 0, 1);
+            $pdf->SetFont('Arial', '', 10);
             $pdf->Cell(30, 6, "Berat", 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
             $pdf->Cell(30, 6, $row->berat_cucian . " Kg", 0, 1);
-            $pdf->Cell(30, 6, "Parfum", 0, 0);
+            $pdf->Cell(30, 6, $parfum, 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
             $pdf->Cell(30, 6, $row->parfum_cucian, 0, 1);
-            $pdf->Cell(30, 6, "Paket Cucian", 0, 0);
+            $pdf->Cell(30, 6, $paket, 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
             $pdf->Cell(30, 6, $row->paket_cucian, 0, 1);
-            $pdf->Cell(30, 6, "Jenis Cucian", 0, 0);
+            $pdf->Cell(30, 6, $jenis, 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
             $pdf->Cell(30, 6, $row->jenis_cucian, 0, 1);
-            $pdf->Cell(30, 6, "Jam Pesan", 0, 0);
-            $pdf->Cell(6, 6, " : ", 0, 0);
-            $pdf->Cell(30, 6, $row->waktu_pemesanan, 0, 1);
-            $pdf->Cell(30, 6, "Tanggal Pesan", 0, 0);
-            $pdf->Cell(6, 6, " : ", 0, 0);
-            $pdf->Cell(30, 6, $tanggal_pemesanan, 0, 1);
             $pdf->Cell(30, 6, "Total Pemesanan", 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
             $pdf->Cell(30, 6, $row->sub_ttl, 0, 1);
             $pdf->Cell(30, 6, "status", 0, 0);
             $pdf->Cell(6, 6, " : ", 0, 0);
-            $pdf->Cell(30, 6, $row->status, 0, 1);
+            $pdf->Cell(30, 6, $status, 0, 1);
             $pdf->Cell(25, 6, " ", 0, 1);
             $grandttl = $row->total_pemesanan;
         }
@@ -229,7 +291,6 @@ class Admin extends CI_Controller
     // fungsi membuat kode pemesanan sesuai tanggal
     public function kodePemesananAcak()
     {
-        date_default_timezone_set('Asia/Jakarta');
         $tgl = date('d/m/');
         $tahun = date('Y');
         $this->db->like('no_pemesanan', $tgl);

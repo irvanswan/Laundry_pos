@@ -198,7 +198,8 @@
                             <tbody class="table-body">
                                 <?php
                                 $no = 1;
-                                foreach ($data_pemesanan as $dt) : ?>
+                                foreach ($data_pemesanan as $dt) :
+                                $status_cucian = $dt['status']; ?>
                                     <tr class="data-row-asli" id="data-row" name="list_data_pesan">
                                         <td><span><?php echo $no++ ?></span></td>
                                         <td>
@@ -220,6 +221,26 @@
                                         <td>
                                             <span class="caption" name="no_telp_customer" data-id='<?php echo $dt['id_pemesanan'] ?>'><?php echo $dt['no_telp_customer']; ?></span>
                                             <input type="text" name="no_telp_customer" class="editor" data-id="<?php echo $dt['id_pemesanan'] ?>" value="<?php echo $dt['no_telp_customer'] ?>">
+                                        </td>
+                                        <td>
+                                            <span class="caption" name="status" data-id='<?php echo $dt['id_pemesanan'] ?>'><?= ($status_cucian =='0' ? 'Tunggu' 
+                                                :($status_cucian == '1' ? 'Cuci - Siap Ambil' 
+                                                :($status_cucian == '2' ? 'Dryer - Siap Ambil' 
+                                                :($status_cucian == '3' ? 'Setrika - Siap Ambil' : 'Selesai'))));?></span>
+                                            <select name="status" class="editor" id="parfum_cucian1">
+                                            <option value="<?= $status_cucian ?>">
+                                                <?= ($status_cucian == '0' ? 'Tunggu' 
+                                                : ($status_cucian == '1' ? 'Cuci - Siap Ambil'
+                                                : ($status_cucian == '2' ? 'Dryer - Siap Ambil'
+                                                : ($status_cucian == '3' ? 'Setrika - Siap Ambil'
+                                                : 'Selesai')))); ?></option>
+                                            <option value="0">Tunggu</option>
+                                            <option value="1">Cuci - Siap Ambil</option>
+                                            <option value="2">Dryer - Siap Ambil</option>
+                                            <option value="3">Setrika - Siap Ambil</option>
+                                            <option value="4">Selesai</option>
+                                        
+                                        </select>
                                         </td>
                                         <td class="text-center">
                                             <div class="row">
@@ -259,13 +280,14 @@
                                             </form>
                                         </td>
                                         <td>
-                                            <form action="" class=" text-center" method="POST">
+                                            <a href="#" class="btn btn-primary btn_detail" data-id="<?php echo $dt['id_pemesanan'] ?>"><i class="now-ui-icons ui-1_zoom-bold"></i></a>
+                                            <!--<form action="#" class=" text-center" method="POST">
                                                 <input type="hidden" name="id_pemesanan" value="<?php echo $dt['id_pemesanan']; ?>">
                                                 <input type="hidden" name="no_pemesanan" value="<?php echo $dt['no_pemesanan']; ?>">
-                                                <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Detail">
+                                                <button type="submit" class="btn btn-primary btn_detail" data-toggle="tooltip" data-placement="top" title="Detail">
                                                     <i class="now-ui-icons ui-1_zoom-bold"></i>
                                                 </button>
-                                            </form>
+                                            </form>-->
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -276,6 +298,8 @@
                 <div class="card-footer">
                     <div class="stats">
                         <i class="now-ui-icons arrows-1_refresh-69"></i> Baru Update
+                        <button type="submit" class="btn btn-danger btn-sm">PDF</button>
+                        <button class="btn btn-success btn-sm btn-excel" onclick="tableHtmlToExcel('list_pemesanan')">EXCEL</button>
                     </div>
                 </div>
             </div>
@@ -285,3 +309,40 @@
 </div>
 <!-- End of Input Data -->
 <!-- End of Isinya -->
+<div class="modal" id="detail_pemesanan" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Detail Pemesanan</h5>
+        <button type="button" class="btn-close btn_close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <span name = "nama_customer">
+            
+        </span>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>No. </th>
+                    <th>No Pemesanan</th>
+                    <th>Jenis Cucian</th>
+                    <th>Paket Cucian</th>
+                    <th>Berat Cucian</th>
+                    <th>Parfum Cucian</th>
+                    <th>Sub Total</th>
+                    <th>Tindakan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    
+                </tr>
+            </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn_close" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
