@@ -199,8 +199,8 @@
                                 <?php
                                 $no = 1;
                                 foreach ($data_pemesanan as $dt) :
-                                $no_pemesanan =  preg_replace('/,.*|[^a-zA-Z0-9]/', '/', $dt['no_pemesanan']);
-                                $status_cucian = $dt['status']; ?>
+                                    $no_pemesanan =  preg_replace('/,.*|[^a-zA-Z0-9]/', '/', $dt['no_pemesanan']);
+                                    $status_cucian = $dt['status']; ?>
                                     <tr class="data-row" id="data-row" name="list_data_pesan">
                                         <td><span><?php echo $no++ ?></span></td>
                                         <td>
@@ -224,17 +224,17 @@
                                             <input type="text" name="no_telp_customer" class="editor" data-id="<?php echo $dt['id_pemesanan'] ?>" value="">
                                         </td>
                                         <td>
-                                            <span class="caption" name="status" data-id='<?php echo $dt['id_pemesanan'] ?>'><?= ($status_cucian =='0' ? 'Tunggu' 
-                                                :($status_cucian == '1' ? 'Cuci - Siap Ambil' 
-                                                :($status_cucian == '2' ? 'Dryer - Siap Ambil' 
-                                                :($status_cucian == '3' ? 'Setrika - Siap Ambil' : 'Selesai'))));?></span>
+                                            <span class="caption" name="status" data-id='<?php echo $dt['id_pemesanan'] ?>'><?= ($status_cucian == '0' ? 'Tunggu'
+                                                                                                                                : ($status_cucian == '1' ? 'Cuci - Siap Ambil'
+                                                                                                                                    : ($status_cucian == '2' ? 'Dryer - Siap Ambil'
+                                                                                                                                        : ($status_cucian == '3' ? 'Setrika - Siap Ambil' : 'Selesai')))); ?></span>
                                             <select name="status" class="editor" id="parfum_cucian1">
                                             <option value="<?= $status_cucian ?>">
-                                                <?= ($status_cucian == '0' ? 'Tunggu' 
-                                                : ($status_cucian == '1' ? 'Cuci - Siap Ambil'
-                                                : ($status_cucian == '2' ? 'Dryer - Siap Ambil'
-                                                : ($status_cucian == '3' ? 'Setrika - Siap Ambil'
-                                                : 'Selesai')))); ?></option>
+                                                <?= ($status_cucian == '0' ? 'Tunggu'
+                                                    : ($status_cucian == '1' ? 'Cuci - Siap Ambil'
+                                                        : ($status_cucian == '2' ? 'Dryer - Siap Ambil'
+                                                            : ($status_cucian == '3' ? 'Setrika - Siap Ambil'
+                                                                : 'Selesai')))); ?></option>
                                             <option value="0">Tunggu</option>
                                             <option value="1">Cuci - Siap Ambil</option>
                                             <option value="2">Dryer - Siap Ambil</option>
@@ -246,18 +246,18 @@
                                         <td class="text-center">
                                             <div class="row">
                                                 <div class="col-sm-6 mb-1">
-                                                    <button type="submit" class="btn btn-warning btn_edit" title="Edit">
-                                                        <i class="now-ui-icons ui-2_settings-90"></i>
+                                                    <button type="submit" class="badge badge-warning btn-round btn_edit" title="Edit">
+                                                        Edit
                                                     </button>
-                                                    <button type="submit" data-id="<?php echo $dt['id_pemesanan'] ?>" class="btn btn-primary btn_confirms" id="btn_confirm" title="Edit">
-                                                        <i class="now-ui-icons ui-1_check"></i>
+                                                    <button type="submit" data-id="<?php echo $dt['id_pemesanan'] ?>" class="badge badge-success btn-round btn_confirms" id="btn_confirm" title="Edit">
+                                                        Save
                                                     </button>
                                                 </div>
                                                 <div class="col-sm-6 mr-1">
                                                     <form action="<?= base_url('admin/hapuspemesanan'); ?>" class="text-center" method="POST">
                                                         <input type="hidden" name="id_pemesanan" value="<?php echo $dt['id_pemesanan']; ?>">
-                                                        <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Inactive" onclick="return confirm('Apakah anda yakin menghapus data ini ?');">
-                                                            <i class="now-ui-icons ui-1_simple-remove"></i>
+                                                        <button type="submit" class="badge badge-danger btn-round" data-toggle="tooltip" data-placement="top" title="Inactive" onclick="return confirm('Apakah anda yakin menghapus data ini ?');">
+                                                            Hapus
                                                         </button>
                                                     </form>
                                                 </div>
@@ -267,21 +267,19 @@
                                             <form action="#" class=" text-center" method="POST">
                                                 <input type="hidden" name="id_pemesanan" value="<?php echo $dt['id_pemesanan']; ?>">
                                                 <input type="hidden" name="no_pemesanan" value="<?php echo $dt['no_pemesanan']; ?>">
-                                                <button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Cetak Struk">
-                                                    <i class="now-ui-icons files_paper"></i>
+                                                <button type="submit" class="badge badge-info btn-round" data-toggle="tooltip" data-placement="top" title="Cetak Struk">
+                                                    Cetak
                                                 </button>
                                             </form>
-                                        </td>
-                                        <td>
                                             <form action="" class=" text-center">
                                                 <input type="hidden" name="" id="">
-                                                <button type="submit" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Cetak Struk">
-                                                    <i class="now-ui-icons ui-1_send"></i>
+                                                <button type="submit" class="badge badge-success btn-round" data-toggle="tooltip" data-placement="top" title="Kirim WA">
+                                                    Kirim WA
                                                 </button>
                                             </form>
                                         </td>
                                         <td>
-                                            <a href="#" class="btn btn-primary btn_detail" data-id="<?php echo $dt['id_pemesanan'] ?>"><i class="now-ui-icons ui-1_zoom-bold"></i></a>
+                                            <a href="#" class="badge badge-primary btn-round btn_detail" data-id="<?php echo $dt['id_pemesanan'] ?>">Rincian</a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
