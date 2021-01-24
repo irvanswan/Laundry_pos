@@ -96,7 +96,7 @@ class Admin extends CI_Controller
                         'paket_cucian'      => $paket[$i],
                         'berat_cucian'      => $berat[$i],
                         'parfum_cucian'     => $parfum[$i],
-                        'sub_ttl'           => preg_replace('/,.*|[^0-9]/', '', $subttl[$i])
+                        'sub_ttl'           => preg_replace('/,.*|[^0-9]|[^-]/', '', $subttl[$i])
                     );
                     $query = $this->db->insert('detail_pemesanan', $data);
                 }
