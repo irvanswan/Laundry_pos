@@ -103,14 +103,16 @@ class Admin extends CI_Controller
                 if ($query) {
                     redirect(site_url('Admin/index'));
                 }
-            } 
+            }
         }
     }
 
-    public function barcode($kode){
+    public function barcode($kode)
+    {
         $this->zend->load('Zend/Barcode');
-        Zend_Barcode::render('code128','image',array('text'=>$kode));
+        Zend_Barcode::render('code128', 'image', array('text' => $kode));
     }
+
     public function detail_pemesanan()
     {
         $where = array(
@@ -137,7 +139,8 @@ class Admin extends CI_Controller
         echo json_encode($data);
     }
     // menghapus data detail pemesanan
-    public function hapusdetail(){
+    public function hapusdetail()
+    {
         $data = array(
             'id_pemesanan' => $this->input->post('id_pemesanan'),
             'id_detail'  => $this->input->post('id_detail')
@@ -159,7 +162,7 @@ class Admin extends CI_Controller
     // edit detail_pemesanan
     public function editdetail()
     {
-         $where = array(
+        $where = array(
             'id_pemesanan' => $this->input->post("id")
         );
 
@@ -189,7 +192,8 @@ class Admin extends CI_Controller
         $this->db->update('data_pemesanan', $data);
         //$this->crud_model->update($id,$value,$modul);
     }
-    function tampilcetakpemesanan(){
+    function tampilcetakpemesanan()
+    {
         $where = array(
             'id_user' => $this->session->userdata('id_entitas')
         );
@@ -198,7 +202,7 @@ class Admin extends CI_Controller
         $data['detail_pemesanan'] = $this->db->get('data_pemesanan')->result();
         $data['data_pemesanan'] = $this->db->get('data_pemesanan')->result();
         $data['title'] = "Data Pemesanan";
-        $this->load->view('admin/tampil_pemesanan',$data);
+        $this->load->view('admin/tampil_pemesanan', $data);
     }
     //fungsi cetak pemesanan fpdf
     function cetakpemesanan()
@@ -424,10 +428,11 @@ class Admin extends CI_Controller
     }
     //==================================== Area untuk Stok Barang admin ====================================
 
-    public function print(){
+    public function print()
+    {
         $html = $this->input->get('table');
-        $pdf = new FPDF('P','mm','A4');
-        $pdf->SetFont('Arial','B',16);
+        $pdf = new FPDF('P', 'mm', 'A4');
+        $pdf->SetFont('Arial', 'B', 16);
         $pdf->WriteHTML($html);
         $pdf->output();
     }
